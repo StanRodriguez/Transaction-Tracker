@@ -18,7 +18,7 @@ You are **responsible** for scheduling time with your squad to seek approval for
 
 ## Project Description
 
-This app keeps track of all your expenses and incomes and see the balance you have for each month.
+This app keeps track of all expenses and incomes and see the balance you have at the moment.
 
 ## [Wireframes](https://photos.app.goo.gl/BWXa42kUcKHUA1aG7)
 
