@@ -82,15 +82,16 @@ Based on the initial logic defined in the previous sections try and breakdown th
 Time frames are also key in the development cycle. You have limited time to code all phases of the game. Your estimates can then be used to evalute game possibilities based on time needed and the actual time you have before game must be submitted. It's always best to pad the time by a few hours so that you account for the unknown so add and additional hour or two to each component to play it safe.
 
 | Component                            | Priority | Estimated Time | Actual Time |
-| ------------------------------------ | :------: | :------------: | :---------: |
+| ----------------------------------------- | :------: | :------------: | :---------: |
+|  HTML/CSS                                 |    H     |      7hrs      |   hrs    |
 | The user can insert incomes               |    H     |      7hrs      |   hrs    |
-| The user can insert expenses              |    H     |      1hrs      |    1hrs     |
-| The user can delete incomes               |    H     |      4hrs      |    2hrs     |
-| The user can delete expenses              |    H     |      1hrs      |    1hrs     |
-| The user can see their balance            |    H     |      2hrs      |    2hrs     |
-| The user can see the transaction details  |    M     |      5hrs      |    3hrs     |
-| PostMVPs                                  |    L     |     10hrs      |    4hrs     |
-| Total                                     |          |     30hrs      |   14.5hrs   |
+| The user can insert expenses              |    H     |      3hrs      |    hrs     |
+| The user can delete incomes               |    H     |      4hrs      |    hrs     |
+| The user can delete expenses              |    H     |      3hrs      |    hrs     |
+| The user can see their balance            |    H     |      2hrs      |    hrs     |
+| The user can see the transaction details  |    M     |      5hrs      |    hrs     |
+| PostMVPs                                  |    L     |     10hrs      |    hrs     |
+| Total                                     |          |     41hrs      |   hrs   |
 
 
 ## Helper Functions
@@ -99,8 +100,7 @@ Helper functions should be generic enought that they can be reused in other appl
 
 | Function |                                  Description                                  |
 | -------- | :---------------------------------------------------------------------------: |
-| Bootstrap      | For a responsive approach  |
-| Django      | takes an array, takes a function as a parameter and return the modified array |
+
 
 ## Additional Libraries
 
