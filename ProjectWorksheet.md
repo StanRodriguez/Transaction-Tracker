@@ -28,35 +28,40 @@ This app keeps track of all your expenses and incomes and see the balance you ha
 
 [Link to Priority Matrix](https://photos.app.goo.gl/bnLUxTuaLBdyW4US9)
 
+## [ERD](https://photos.app.goo.gl/SWXnxWQW6kmUdFLN7)
+
+[Link to ERD](https://photos.app.goo.gl/SWXnxWQW6kmUdFLN7)
+
+
 ### MVP/PostMVP - 5min
 
 The functionality will then be divided into two separate lists: MPV and PostMVP. Carefully decided what is placed into your MVP as the client will expect this functionality to be implemented upon project completion.
 
 #### MVP
 
-- The user can insert incomes. &#10003;
-- The user can insert expenses. &#10003;
-- The user can delete incomes. &#10003;
-- The user can delete expenses. &#10003;
-- The user can see their balance. &#10003;
-- The user can see the transaction details. &#10003;
-- Date filter.
+- The user can insert incomes. 
+- The user can insert expenses. 
+- The user can delete incomes. 
+- The user can delete expenses. 
+- The user can see their balance. 
+- The user can see the transaction details.
 
 #### PostMVP
 
 - User login.
-- Image uploading (invoice).
+- Image uploading.
 - History.
 - Session handling.
 - Edit incomes.
 - Edit expenses.
 - More filters.
+- Date filter.
 
 ## [React Architectural Design](https://photos.app.goo.gl/y5c3GFojTMtRKcVj6)
 
 [Link to React Architectural Design](https://photos.app.goo.gl/y5c3GFojTMtRKcVj6)
 
-## Functional Components
+## UI Components
 
 Based on the initial logic defined in the previous sections try and breakdown the logic further into stateless/stateful components.
 
@@ -78,19 +83,15 @@ Time frames are also key in the development cycle. You have limited time to code
 
 | Component                            | Priority | Estimated Time | Actual Time |
 | ------------------------------------ | :------: | :------------: | :---------: |
-| Adding select box                    |    H     |      3hrs      |   1.5hrs    |
-| Get the API country information      |    H     |      4hrs      |    1hrs     |
-| Render the API country information   |    H     |      4hrs      |    2hrs     |
-| Render API map                       |    H     |      4hrs      |    1hrs     |
-| Show the country location on the map |    M     |      4hrs      |    2hrs     |
-| Styling                              |    M     |      5hrs      |    3hrs     |
-| PostMVPs                             |    L     |      5hrs      |    4hrs     |
-| Total                                |          |     29hrs      |   14.5hrs   |
+| The user can insert incomes               |    H     |      7hrs      |   hrs    |
+| The user can insert expenses              |    H     |      1hrs      |    1hrs     |
+| The user can delete incomes               |    H     |      4hrs      |    2hrs     |
+| The user can delete expenses              |    H     |      1hrs      |    1hrs     |
+| The user can see their balance            |    H     |      2hrs      |    2hrs     |
+| The user can see the transaction details  |    M     |      5hrs      |    3hrs     |
+| PostMVPs                                  |    L     |     10hrs      |    4hrs     |
+| Total                                     |          |     30hrs      |   14.5hrs   |
 
-## API's Links
-
-- [Mapbox](https://www.mapbox.com/)
-- [Rest Countries](https://restcountries.eu/)
 
 ## Helper Functions
 
@@ -98,7 +99,8 @@ Helper functions should be generic enought that they can be reused in other appl
 
 | Function |                                  Description                                  |
 | -------- | :---------------------------------------------------------------------------: |
-| map      | takes an array, takes a function as a parameter and return the modified array |
+| Bootstrap      | For a responsive approach  |
+| Django      | takes an array, takes a function as a parameter and return the modified array |
 
 ## Additional Libraries
 
@@ -106,10 +108,8 @@ Use this section to list all supporting libraries and thier role in the project.
 
 | Library            |                      What it Does                       |
 | ------------------ | :-----------------------------------------------------: |
-| Bootstrap          |  Used to help style and make my application responsive  |
-| REST Countries API |            Used to get countries information            |
-| React-Select       | Used to give extra functionality in the select elements |
-| MapBoxGL           |            Used to render a map in the app.             |
+| Bootstrap      | For a responsive approach  |
+| Django      | Back-end framework built in Python |
 
 ## Code Snippet
 
