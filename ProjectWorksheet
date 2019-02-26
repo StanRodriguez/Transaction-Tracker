@@ -18,15 +18,15 @@ You are **responsible** for scheduling time with your squad to seek approval for
 
 ## Project Description
 
-This app keeps track of all your expenses to
+This app keeps track of all your expenses and incomes and see the balance you have for each month.
 
-## [Wireframes](https://photos.app.goo.gl/kP7KJwarsJeUawpt8)
+## [Wireframes](https://photos.app.goo.gl/BWXa42kUcKHUA1aG7)
 
-[Link to Wireframes](https://photos.app.goo.gl/kP7KJwarsJeUawpt8)
+[Link to Wireframes](https://photos.app.goo.gl/BWXa42kUcKHUA1aG7)
 
-## [Priority Matrix](https://photos.app.goo.gl/5rHnQhydcwRL68Yz6)
+## [Priority Matrix](https://photos.app.goo.gl/bnLUxTuaLBdyW4US9)
 
-[Link to Priority Matrix](https://photos.app.goo.gl/5rHnQhydcwRL68Yz6)
+[Link to Priority Matrix](https://photos.app.goo.gl/bnLUxTuaLBdyW4US9)
 
 ### MVP/PostMVP - 5min
 
@@ -34,16 +34,23 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 
 #### MVP
 
-- The user can pick the country in a select box. &#10003;
-- Render country information on the page. &#10003;
-- Render a map on the screen showing the country location. &#10003;
-- Render a location pin insinde the map. &#10003;
+- The user can insert incomes. &#10003;
+- The user can insert expenses. &#10003;
+- The user can delete incomes. &#10003;
+- The user can delete expenses. &#10003;
+- The user can see their balance. &#10003;
+- The user can see the transaction details. &#10003;
+- Date filter.
 
 #### PostMVP
 
-- Landing page.
-- Use a search bar to filter through the countries on the select element. &#10003;
-- Checkboxes making the user decide what information they want to see.
+- User login.
+- Image uploading (invoice).
+- History.
+- Session handling.
+- Edit incomes.
+- Edit expenses.
+- More filters.
 
 ## [React Architectural Design](https://photos.app.goo.gl/qjdD6iHLRSxhJQeg8)
 
