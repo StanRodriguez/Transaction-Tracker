@@ -1,2 +1,10 @@
-# Project-4
-Final project for General Assembly
+# SimpleTracker
+
+## Descripcion
+This app keeps track of all expenses and incomes and see the balance you have at the moment.
+
+## Link
+
+## How to use it
+
+## Screenshots
