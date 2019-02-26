@@ -52,9 +52,9 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 - Edit expenses.
 - More filters.
 
-## [React Architectural Design](https://photos.app.goo.gl/qjdD6iHLRSxhJQeg8)
+## [React Architectural Design](https://photos.app.goo.gl/y5c3GFojTMtRKcVj6)
 
-[Link to React Architectural Design](https://photos.app.goo.gl/qjdD6iHLRSxhJQeg8)
+[Link to React Architectural Design](https://photos.app.goo.gl/y5c3GFojTMtRKcVj6)
 
 ## Functional Components
 
@@ -62,14 +62,15 @@ Based on the initial logic defined in the previous sections try and breakdown th
 
 | Component       |                               Description                                |
 | --------------- | :----------------------------------------------------------------------: |
-| App             |                        Serves as a main container                        |
-| Search          |            Searches for API information with user interaction            |
-| Map             |              Renders the map pointing the country selected               |
-| MapStyleButton  | Renders buttons to change map style (i.e. satellite, streets, dark, etc) |
-| Information     |              Renders information about the selected country              |
-| InformationList |          Renders varios items in the same piece of information           |
-| Header          |                      Defines the header information                      |
-| Footer          |                      Defines the footer information                      |
+| App             |                        Serves as a main container.                       |
+| Header          |            Renders the user balance.             |
+| Dashboard       |              Renders all your transactions from a week ago.              |
+| Transaction     | Renders short summary transaction. |
+| TransactionDetail|                   Renders all the transaction-related information.        |
+| NewTransaction |          Create an income and/or expense.           |
+| History          |         Hold the static information for all the transactions in a given time.                     |
+| Table          |                      Serves a header to grab the transaction details.                      |
+|TableRow| Render each transaction|
 
 ## Time Frames
 
