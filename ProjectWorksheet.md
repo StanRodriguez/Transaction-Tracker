@@ -86,12 +86,12 @@ Time frames are also key in the development cycle. You have limited time to code
 |  HTML/CSS                                 |    H     |      7hrs      |   hrs    |
 | The user can insert incomes               |    H     |      7hrs      |   hrs    |
 | The user can insert expenses              |    H     |      3hrs      |    hrs     |
-| The user can delete incomes               |    H     |      4hrs      |    hrs     |
+| The user can delete incomes               |    H     |      5hrs      |    hrs     |
 | The user can delete expenses              |    H     |      3hrs      |    hrs     |
 | The user can see their balance            |    H     |      2hrs      |    hrs     |
 | The user can see the transaction details  |    M     |      5hrs      |    hrs     |
-| PostMVPs                                  |    L     |     10hrs      |    hrs     |
-| Total                                     |          |     41hrs      |   hrs   |
+| PostMVPs                                  |    L     |     20hrs      |    hrs     |
+| Total                                     |          |     52hrs      |   hrs   |
 
 
 ## Helper Functions
