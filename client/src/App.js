@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import {  } from "";
 
 class App extends Component {
+  state = {
+    user: {},
+    transactions: {}
+  };
+  async componentDidMount() {
+    const response = await
+  }
   render() {
     return (
       <div className="App">
