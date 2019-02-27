@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import {  } from "";
+import axios from "axios";
 
 class App extends Component {
   state = {
@@ -9,7 +9,10 @@ class App extends Component {
     transactions: {}
   };
   async componentDidMount() {
-    const response = await
+    const response = await axios("/transactions/" + 2);
+    this.setState({
+      user: response.data.transactions
+    });
   }
   render() {
     return (
