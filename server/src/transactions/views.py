@@ -10,4 +10,4 @@ def transactions_view(request, id=None):
     user = User.objects.get(id=id)
     transaction = list(user.transaction_set.values(
         'id', 'amount', 'type', 'description', 'comment', 'date', 'time'))
-    return JsonResponse({'user': user.id, 'transactions': transaction}, safe=False)
+    return JsonResponse({'user': {'id': user.id, 'username': user.username, 'balance': user.balance}, 'transactions': transaction}, safe=False)

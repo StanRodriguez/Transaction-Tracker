@@ -1,37 +1,36 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
+import Header from "./components/Header/Header";
+import Transaction from "./components/Transaction/Transaction";
 
 class App extends Component {
   state = {
     user: {},
-    transactions: {}
+    transactions: {},
+    isLoaded: false
   };
   async componentDidMount() {
-    const response = await axios("/transactions/" + 2);
+    const response = await axios("/transaction/" + 2);
+    const { user, transactions } = response.data;
     this.setState({
-      user: response.data.transactions
+      user,
+      transactions,
+      isLoaded: true
     });
   }
   render() {
-    return (
+    const { user, transactions } = this.state;
+
+    return this.state.isLoaded ? (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Header username={user.username} balance={user.balance} />
+        {transactions.map(transaction => {
+          return <Transaction transaction={transaction} key={transaction.id} />;
+        })}
       </div>
+    ) : (
+      <div className="is-loading">Loading...</div>
     );
   }
 }
