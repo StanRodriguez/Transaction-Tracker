@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
-import Header from "./components/Header/Header";
+import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
+import { Container } from "semantic-ui-react";
 
 class App extends Component {
   state = {
@@ -10,25 +11,46 @@ class App extends Component {
     transactions: {},
     isLoaded: false
   };
-  async componentDidMount() {
-    const response = await axios("/transaction/" + 2);
+  getTransactions = async id => {
+    const response = await axios(`/user/${id}/transactions/`);
     const { user, transactions } = response.data;
     this.setState({
       user,
       transactions,
       isLoaded: true
     });
+  };
+  componentDidMount() {
+    this.getTransactions(2);
   }
+  delete = async id => {
+    const response = await axios({
+      method: "delete",
+      url: `/user/${this.state.user.id}/transaction/delete/${id}`,
+      xsrfHeaderName: "X-CSRFToken"
+    });
+    console.log(response);
+  };
+  handleDelete = e => {
+    e.preventDefault();
+    this.delete(e.target.value);
+  };
   render() {
     const { user, transactions } = this.state;
 
     return this.state.isLoaded ? (
-      <div className="App">
-        <Header username={user.username} balance={user.balance} />
+      <Container fluid textAlign="center">
+        <HeaderComponent username={user.username} balance={user.balance} />
         {transactions.map(transaction => {
-          return <Transaction transaction={transaction} key={transaction.id} />;
+          return (
+            <Transaction
+              transaction={transaction}
+              handleDelete={this.handleDelete}
+              key={transaction.id}
+            />
+          );
         })}
-      </div>
+      </Container>
     ) : (
       <div className="is-loading">Loading...</div>
     );
