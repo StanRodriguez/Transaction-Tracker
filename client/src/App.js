@@ -36,13 +36,12 @@ class App extends Component {
 
         headers: { "X-CSRFToken": csrftoken }
       });
-      if (response.data[0] > 0) {
-        this.setState({ message: "Transaction deleted successfully." });
-      } else {
-        this.setState({
-          message: "Something went wrong trying to delete. Try again."
-        });
-      }
+      response.data[0] > 0
+        ? this.setState({ message: "Transaction deleted successfully." })
+        : this.setState({
+            message: "Something went wrong trying to delete. Try again."
+          });
+
       this.getTransactions(this.state.user.id);
       console.log(response);
     } catch (error) {
@@ -51,7 +50,7 @@ class App extends Component {
   };
   handleDelete = e => {
     e.preventDefault();
-    this.delete(e.target.value);
+    window.confirm("Are you sure?") && this.delete(e.target.value);
   };
   render() {
     const { user, transactions } = this.state;
