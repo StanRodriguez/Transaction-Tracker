@@ -4,7 +4,6 @@ import TransactionDetails from "../TransactionDetails/TransactionDetails";
 
 const Transaction = ({ transaction, handleDelete }) => {
   const { id, amount, type, description, date, time } = transaction;
-  console.log(handleDelete);
 
   return (
     <section>

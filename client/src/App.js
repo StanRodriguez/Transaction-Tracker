@@ -5,11 +5,16 @@ import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
 import { Container } from "semantic-ui-react";
 
+import { Cookies } from "react-cookie";
+const cookies = new Cookies();
+const csrftoken = cookies.get("csrftoken");
+
 class App extends Component {
   state = {
     user: {},
     transactions: {},
-    isLoaded: false
+    isLoaded: false,
+    message: ""
   };
   getTransactions = async id => {
     const response = await axios(`/user/${id}/transactions/`);
@@ -24,12 +29,25 @@ class App extends Component {
     this.getTransactions(2);
   }
   delete = async id => {
-    const response = await axios({
-      method: "delete",
-      url: `/user/${this.state.user.id}/transaction/delete/${id}`,
-      xsrfHeaderName: "X-CSRFToken"
-    });
-    console.log(response);
+    try {
+      const response = await axios({
+        method: "delete",
+        url: `/user/${this.state.user.id}/transaction/delete/${id}`,
+
+        headers: { "X-CSRFToken": csrftoken }
+      });
+      if (response.data[0] > 0) {
+        this.setState({ message: "Transaction deleted successfully." });
+      } else {
+        this.setState({
+          message: "Something went wrong trying to delete. Try again."
+        });
+      }
+      this.getTransactions(this.state.user.id);
+      console.log(response);
+    } catch (error) {
+      console.error("Error ocurred trying to delete: ", error);
+    }
   };
   handleDelete = e => {
     e.preventDefault();

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Header, Modal } from "semantic-ui-react";
 
 const TransactionDetails = ({ id, handleDelete }) => {
-  console.log(id);
-  console.log(handleDelete);
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Modal trigger={<Button primary>Show details</Button>}>
+    <Modal
+      open={isOpen}
+      trigger={
+        <Button onClick={(onclick, () => setIsOpen(!isOpen))} primary>
+          Show details
+        </Button>
+      }
+    >
       <Modal.Header>{id}</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -31,7 +36,11 @@ const TransactionDetails = ({ id, handleDelete }) => {
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button basic color="yellow">
+        <Button
+          basic
+          color="yellow"
+          onClick={(onclick, () => setIsOpen(!isOpen))}
+        >
           Edit
         </Button>
         <Button
@@ -39,7 +48,13 @@ const TransactionDetails = ({ id, handleDelete }) => {
           color="red"
           name="delete"
           value={id}
-          onClick={(onclick, handleDelete)}
+          onClick={
+            (onclick,
+            e => {
+              handleDelete(e);
+              setIsOpen(!isOpen);
+            })
+          }
         >
           Delete
         </Button>

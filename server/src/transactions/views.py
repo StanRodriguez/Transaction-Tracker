@@ -16,5 +16,7 @@ def transactions_view(request, id=None):
 def transaction_delete(request, user_id, transaction_id):
     # if request.method == 'DELETE':
     #     pass
+    user = User.objects.get(id=user_id)
+    transaction = user.transaction_set.get(id=transaction_id)
 
-    return HttpResponse(request.method)
+    return JsonResponse(transaction.delete(), safe=False)
