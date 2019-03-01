@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Segment } from "semantic-ui-react";
+import { Form, Input, Segment, Select } from "semantic-ui-react";
 import { actualDateTimeInput } from "../../helperFunctions/formatTime";
 const TransactionForm = () => {
   console.log(actualDateTimeInput());
@@ -22,6 +22,15 @@ const TransactionForm = () => {
             placeholder="0.00"
             type="number"
             icon="dollar sign"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Select
+            placeholder="Select your country"
+            options={[
+              { value: "value", text: "This is the text" },
+              { value: "value", text: "This is the text" }
+            ]}
           />
         </Form.Field>
       </Form>

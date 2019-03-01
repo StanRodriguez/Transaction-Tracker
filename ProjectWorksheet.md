@@ -6,11 +6,11 @@ This schedule will be used to keep track of your progress throughout the week an
 
 You are **responsible** for scheduling time with your squad to seek approval for each deliverable by the end of the corresponding day, excluding `Saturday` and `Sunday`.
 
-| Day   | Deliverable                                          | Status   |
-| ----- | ---------------------------------------------------- | -------- |
-| Day 1 | Project Description                                  | Incomplete |
-| Day 1 | Wireframes / Priority Matrix / Functional Components | Incomplete |
-| Day 2 | Core Application Structure (HTML, CSS, etc.)         | Incomplete |
+| Day   | Deliverable                                          | Status     |
+| ----- | ---------------------------------------------------- | ---------- |
+| Day 1 | Project Description                                  | Complete   |
+| Day 1 | Wireframes / Priority Matrix / Functional Components | Complete   |
+| Day 2 | Core Application Structure (HTML, CSS, etc.)         | Complete   |
 | Day 3 | Pseudocode / actual code                             | Incomplete |
 | Day 3 | Initial Clickable Model                              | Incomplete |
 | Day 4 | MVP                                                  | Incomplete |
@@ -32,18 +32,17 @@ This app keeps track of all expenses and incomes and see the balance you have at
 
 [Link to ERD](https://photos.app.goo.gl/SWXnxWQW6kmUdFLN7)
 
-
 ### MVP/PostMVP - 5min
 
 The functionality will then be divided into two separate lists: MPV and PostMVP. Carefully decided what is placed into your MVP as the client will expect this functionality to be implemented upon project completion.
 
 #### MVP
 
-- The user can insert incomes. 
-- The user can insert expenses. 
-- The user can delete incomes. 
-- The user can delete expenses. 
-- The user can see their balance. 
+- The user can insert incomes.
+- The user can insert expenses.
+- The user can delete incomes. &#10003;
+- The user can delete expenses. &#10003;
+- The user can see their balance. &#10003;
 - The user can see the transaction details.
 
 #### PostMVP
@@ -65,74 +64,82 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 
 Based on the initial logic defined in the previous sections try and breakdown the logic further into stateless/stateful components.
 
-| Component       |                               Description                                |
-| --------------- | :----------------------------------------------------------------------: |
-| App             |                        Serves as a main container.                       |
-| Header          |            Renders the user balance.             |
-| Dashboard       |              Renders all your transactions from a week ago.              |
-| Transaction     | Renders short summary transaction. |
-| TransactionDetail|                   Renders all the transaction-related information.        |
-| NewTransaction |          Create an income and/or expense.           |
-| History          |         Hold the static information for all the transactions in a given time.                     |
-| Table          |                      Serves a header to grab the transaction details.                      |
-|TableRow| Render each transaction|
+| Component         |                              Description                              |
+| ----------------- | :-------------------------------------------------------------------: |
+| App               |                      Serves as a main container.                      |
+| Header            |                       Renders the user balance.                       |
+| Dashboard         |            Renders all your transactions from a week ago.             |
+| Transaction       |                  Renders short summary transaction.                   |
+| TransactionDetail |           Renders all the transaction-related information.            |
+| NewTransaction    |                   Create an income and/or expense.                    |
+| History           | Hold the static information for all the transactions in a given time. |
+| Table             |           Serves a header to grab the transaction details.            |
+| TableRow          |                        Render each transaction                        |
 
 ## Time Frames
 
 Time frames are also key in the development cycle. You have limited time to code all phases of the game. Your estimates can then be used to evalute game possibilities based on time needed and the actual time you have before game must be submitted. It's always best to pad the time by a few hours so that you account for the unknown so add and additional hour or two to each component to play it safe.
 
-| Component                            | Priority | Estimated Time | Actual Time |
-| ----------------------------------------- | :------: | :------------: | :---------: |
-|  HTML/CSS                                 |    H     |      7hrs      |   hrs    |
-| The user can insert incomes               |    H     |      7hrs      |   hrs    |
-| The user can insert expenses              |    H     |      3hrs      |    hrs     |
-| The user can delete incomes               |    H     |      5hrs      |    hrs     |
-| The user can delete expenses              |    H     |      3hrs      |    hrs     |
-| The user can see their balance            |    H     |      2hrs      |    hrs     |
-| The user can see the transaction details  |    M     |      5hrs      |    hrs     |
-| PostMVPs                                  |    L     |     20hrs      |    hrs     |
-| Total                                     |          |     52hrs      |   hrs   |
-
+| Component                                | Priority | Estimated Time | Actual Time |
+| ---------------------------------------- | :------: | :------------: | :---------: |
+| HTML/CSS                                 |    H     |      7hrs      |    3hrs     |
+| The user can insert incomes              |    H     |      7hrs      |     hrs     |
+| The user can insert expenses             |    H     |      3hrs      |     hrs     |
+| The user can delete incomes              |    H     |      5hrs      |    5hrs     |
+| The user can delete expenses             |    H     |      3hrs      |    1hrs     |
+| The user can see their balance           |    H     |      2hrs      |    3hrs     |
+| The user can see the transaction details |    M     |      5hrs      |     hrs     |
+| PostMVPs                                 |    L     |     20hrs      |     hrs     |
+| Total                                    |          |     52hrs      |     hrs     |
 
 ## Helper Functions
 
 Helper functions should be generic enought that they can be reused in other applications. Use this section to document all helper functions that fall into this category.
 
-| Function |                                  Description                                  |
-| -------- | :---------------------------------------------------------------------------: |
+| Function | Description |
+| -------- | :---------: |
 
 
 ## Additional Libraries
 
 Use this section to list all supporting libraries and thier role in the project.
 
-| Library            |                      What it Does                       |
-| ------------------ | :-----------------------------------------------------: |
-| Bootstrap      | For a responsive approach  |
-| Django      | Back-end framework built in Python |
+| Library           |             What it Does              |
+| ----------------- | :-----------------------------------: |
+| Semantic UI       |       For a responsive approach       |
+| Django            |  Back-end framework built in Python   |
+| react-cookie      |      Work with cookies in react       |
+| semantic-ui-react | Oficial Semantic UI library for react |
+| semantic-ui-css   |        Give the Semantic style        |
 
 ## Code Snippet
 
 Use this section to include a brief code snippet of functionality that you are proud of an a brief description
 
 ```
-const numberWithCommas = x => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
+const [isOpen, setIsOpen] = useState(false);
 // this function add commas as a separator in numbers.
-// source: https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-export default numberWithCommas;
+// source: React official website
 
+```
+
+```
+const actualDateTimeInput = () => {
+  const dateTimeArray = new Date().toISOString().split(".");
+  dateTimeArray.pop();
+
+  return dateTimeArray.join("");
+};
+//Use to format time
 ```
 
 ## Change Log
 
 Use this section to document what changes were made and the reasoning behind those changes.
 
-| Original Plan                  |                                      Outcome                                       |
-| ------------------------------ | :--------------------------------------------------------------------------------: |
-| Have one Information component | I added another component to render several items in the same information category |
+| Original Plan |                    Outcome                    |
+| ------------- | :-------------------------------------------: |
+| Use Boostrap  | Use Semantic UI to know another CSS Framework |
 
 ## Issues and Resolutions
 
@@ -140,3 +147,7 @@ Use this section to list of all major issues encountered and their resolution.
 
 **ERROR**: Map returning to default when zooming in or out.
 **RESOLUTION**: adding the previous state to the onViewPortChange event.
+
+```
+
+```
