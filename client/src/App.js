@@ -3,9 +3,10 @@ import "./App.css";
 import axios from "axios";
 import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
-import { Container } from "semantic-ui-react";
+import { Container, Dimmer, Loader } from "semantic-ui-react";
 
 import { Cookies } from "react-cookie";
+import TransactionForm from "./components/TransactionForm/TransactionForm";
 const cookies = new Cookies();
 const csrftoken = cookies.get("csrftoken");
 
@@ -52,12 +53,14 @@ class App extends Component {
     e.preventDefault();
     window.confirm("Are you sure?") && this.delete(e.target.value);
   };
+
   render() {
     const { user, transactions } = this.state;
 
     return this.state.isLoaded ? (
       <Container fluid textAlign="center">
         <HeaderComponent username={user.username} balance={user.balance} />
+        <TransactionForm />
         {transactions.map(transaction => {
           return (
             <Transaction
@@ -69,7 +72,9 @@ class App extends Component {
         })}
       </Container>
     ) : (
-      <div className="is-loading">Loading...</div>
+      <Dimmer active inverted>
+        <Loader inverted content="Loading" />
+      </Dimmer>
     );
   }
 }

@@ -55,6 +55,12 @@ const formatCompleteDate = (timeString, dateString) => {
 //   // return formatAmFM(timeArrayColon[0], timeArrayColon[1], timeArrayColon[2]);
 //   return new Date(completeDate);
 // };
+const actualDateTimeInput = () => {
+  const dateTimeArray = new Date().toISOString().split(".");
+  dateTimeArray.pop();
+
+  return dateTimeArray.join("");
+};
 
 // export default formatTime;
-export { formatCompleteDate };
+export { formatCompleteDate, actualDateTimeInput };

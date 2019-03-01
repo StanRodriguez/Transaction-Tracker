@@ -21,16 +21,8 @@ const TransactionDetails = ({ id, handleDelete }) => {
             address.We've found the following gravatar image associated with
             your e-mail address.We've found the following gravatar image
             associated with your e-mail address.We've found the following
-            gravatar image associated with your e-mail address.We've found the
-            following gravatar image associated with your e-mail address.We've
-            found the following gravatar image associated with your e-mail
-            address.We've found the following gravatar image associated with
-            your e-mail address.We've found the following gravatar image
-            associated with your e-mail address.We've found the following
-            gravatar image associated with your e-mail address.We've found the
-            following gravatar image associated with your e-mail address. We've
-            found the following gravatar image associated with your e-mail
-            address.We've found the following gravatar image associated with
+            xsociated with your e-mail address.We've found the following
+            gravatar image associated with
           </p>
           <p>Is it okay to use this photo?</p>
         </Modal.Description>
