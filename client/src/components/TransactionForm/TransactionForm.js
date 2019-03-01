@@ -1,8 +1,8 @@
-import React from "react";
-import { Form, Input, Segment, Select } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Form, Input, Segment, Dropdown } from "semantic-ui-react";
 import { actualDateTimeInput } from "../../helperFunctions/formatTime";
 const TransactionForm = () => {
-  console.log(actualDateTimeInput());
+  const [selectValue, setSelectValue] = useState("IN");
 
   return (
     <Segment textAlign="center">
@@ -25,11 +25,15 @@ const TransactionForm = () => {
           />
         </Form.Field>
         <Form.Field>
-          <Select
-            placeholder="Select your country"
+          <Dropdown
+            placeholder="Select Friend"
+            fluid
+            selection
+            value={selectValue}
+            onChange={}
             options={[
-              { value: "value", text: "This is the text" },
-              { value: "value", text: "This is the text" }
+              { value: "IN", text: "Income" },
+              { value: "EX", text: "Expense" }
             ]}
           />
         </Form.Field>
