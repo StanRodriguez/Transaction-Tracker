@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from transactions.views import transactions_view, transaction_delete
+from transactions.views import transactions_view, transaction_delete, transaction_post
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/<id>/transactions/', transactions_view),
     path('user/<user_id>/transaction/delete/<transaction_id>', transaction_delete),
+    path('user/<user_id>/transaction/post/', transaction_post),
 ]

@@ -15,12 +15,11 @@ class User(AbstractUser):
 class Transaction(models.Model):
     amount = models.DecimalField(
         decimal_places=2, max_digits=9, default=0, blank=False, null=False)
-    TRANSACTION_TYPES = (
-        ('IN', 'Income'),
-        ('EX', 'Expense')
-    )
-    type = models.CharField(
-        max_length=2, choices=TRANSACTION_TYPES, blank=False, null=False)
+    # TRANSACTION_TYPES = (
+    #     ('IN', 'Income'),
+    #     ('EX', 'Expense')
+    # )
+    is_expense = models.BooleanField(blank=False, null=False)
     description = models.CharField(max_length=70, blank=False, null=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

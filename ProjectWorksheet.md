@@ -38,8 +38,8 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 
 #### MVP
 
-- The user can insert incomes.
-- The user can insert expenses.
+- The user can insert incomes. &#10003;
+- The user can insert expenses. &#10003;
 - The user can delete incomes. &#10003;
 - The user can delete expenses. &#10003;
 - The user can see their balance. &#10003;
@@ -53,7 +53,7 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 - Session handling.
 - Edit incomes.
 - Edit expenses.
-- More filters.
+- search.
 - Date filter.
 - Dom Virtualization.
 
