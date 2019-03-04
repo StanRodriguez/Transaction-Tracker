@@ -4,3 +4,19 @@
 .ui.input.expense input {
   color: #b03060 !important;
 }
+.transaction-form {
+  animation-name: translate;
+  animation-fill-mode: both;
+  animation-duration: 1s;
+  animation-direction: alternate;
+}
+@keyframes translate {
+  0% {
+    translate: (0px, 100px);
+    opacity: 0;
+  }
+  100% {
+    translate: (0px, 0px);
+    opacity: 1;
+  }
+}

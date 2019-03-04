@@ -14,8 +14,9 @@ const TransactionForm = ({ handleSubmit, handleChange, transaction }) => {
   console.log(transaction);
 
   return (
-    <Segment textAlign="center">
+    <Segment textAlign="center" className="transaction-form">
       <Form onSubmit={handleSubmit}>
+        <input type="hidden" name="id" value={transaction.id} />
         <Form.Field>
           <Input
             label="Date:"
@@ -30,7 +31,7 @@ const TransactionForm = ({ handleSubmit, handleChange, transaction }) => {
         <Form.Field>
           <Input
             // value="2018-06-12T19:30"
-            className={transaction.isExpense ? "expense" : "income"}
+            className={transaction.is_expense ? "expense" : "income"}
             iconPosition="left"
             onChange={handleChange}
             value={transaction.amount}
@@ -46,16 +47,16 @@ const TransactionForm = ({ handleSubmit, handleChange, transaction }) => {
             toggle
             type="checkbox"
             name="isExpense"
-            label={transaction.isExpense ? "Expense" : "Income"}
-            checked={transaction.isExpense}
+            label={transaction.is_expense ? "Expense" : "Income"}
+            checked={transaction.is_expense}
             onClick={
               (onclick,
               () =>
                 handleChange({
                   target: {
                     type: "checkbox",
-                    name: "isExpense",
-                    value: !transaction.isExpense
+                    name: "is_expense",
+                    value: !transaction.is_expense
                   }
                 }))
             }

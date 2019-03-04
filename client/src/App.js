@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import axios from "axios";
+import Axios from "axios";
 import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
 import {
@@ -9,7 +9,8 @@ import {
   Loader,
   Icon,
   Button,
-  Transition
+  Transition,
+  Message
 } from "semantic-ui-react";
 
 import { Cookies } from "react-cookie";
@@ -25,17 +26,21 @@ class App extends Component {
     transactions: [],
     transaction: {
       date: actualDateTimeInput(),
+      id: "",
       amount: "",
-      isExpense: true,
+      is_expense: true,
       description: "",
       comment: ""
     },
     isLoaded: false,
-    message: "",
+    message: {
+      text: "",
+      code: 0
+    },
     isFormVisible: false
   };
   getTransactions = async id => {
-    const response = await axios(`/user/${id}/transactions/`);
+    const response = await Axios(`/user/${id}/transactions/`);
     const { user, transactions } = response.data;
     this.setState({
       user,
@@ -48,17 +53,27 @@ class App extends Component {
   }
   delete = async id => {
     try {
-      const response = await axios({
+      const response = await Axios({
         method: "delete",
-        url: `/user/${this.state.user.id}/transaction/delete/${id}`,
+        url: `/user/${this.state.user.id}/transaction/${id}/delete`,
 
         headers: { "X-CSRFToken": csrftoken }
       });
       response.data[0] > 0
-        ? this.setState({ message: "Transaction deleted successfully." })
+        ? this.setState({
+            message: {
+              text: "Transaction deleted successfully.",
+              code: "positive"
+            }
+          })
         : this.setState({
-            message: "Something went wrong trying to delete. Try again."
+            message: {
+              text: "Something went wrong trying to delete. Try again.",
+              code: "negative"
+            }
           });
+
+      window.scrollTo(0, 0);
 
       this.getTransactions(this.state.user.id);
       console.log(response);
@@ -77,17 +92,17 @@ class App extends Component {
       };
     });
   };
-  handleAmount = (amount, isExpense = null) => {
-    isExpense =
-      isExpense === null ? this.state.transaction.isExpense : isExpense;
+  handleAmount = (amount, is_expense = null) => {
+    is_expense =
+      is_expense === null ? this.state.transaction.is_expense : is_expense;
     amount = parseFloat(amount);
-    return isExpense ? Math.abs(amount) * -1 : Math.abs(amount);
+    return is_expense ? Math.abs(amount) * -1 : Math.abs(amount);
   };
 
   handleChange = e => {
     let { name, value } = e.target;
     value = name === "amount" ? this.handleAmount(value) : value;
-    if (name === "isExpense") {
+    if (name === "is_expense") {
       let { amount } = this.state.transaction;
       amount = this.handleAmount(amount, value);
       this.setState(prevState => {
@@ -118,49 +133,117 @@ class App extends Component {
   post = async () => {
     const { transaction, user } = this.state;
     const [date, time] = this.formatToSend();
-    console.log(this.state.transaction);
 
-    const response = axios({
+    const response = await Axios({
       method: "post",
       url: `user/${user.id}/transaction/post/`,
       data: { ...transaction, date, time },
       headers: { "X-CSRFToken": csrftoken }
     });
+    console.log(response.data.id);
+    response.data.id
+      ? this.setState({
+          transaction: {
+            date: actualDateTimeInput(),
+            amount: "",
+            is_expense: true,
+            description: "",
+            comment: ""
+          },
+          message: {
+            text: "Transaction created successfully",
+            code: "positive"
+          }
+        })
+      : this.setState({
+          transaction: {
+            date: actualDateTimeInput(),
+            amount: "",
+            is_expense: true,
+            description: "",
+            comment: ""
+          },
+          message: {
+            text: "There was a problem trying to create",
+            code: "negative"
+          }
+        });
+  };
+  put = () => {
+    const response = Axios.put("");
   };
   handleSubmit = e => {
     e.preventDefault();
+    e.target.id.value ? this.post() : this.update();
+    // e.target.id
+    // this.post();
+  };
+  // handleDetailsClick = async id => {
+  //   const response = await Axios.get(
+  //     `user/${this.state.user.id}/transaction/${id}/details/`
+  //   );
+  //   console.log(response.data);
 
-    this.post();
+  //   this.setState({
+  //     transaction: {
+  //       ...response.data
+  //     }
+  //   });
+  // };
+  handleEdit = transaction => {
+    const { date, time } = transaction;
+    console.log(`${date}T${time}`);
+
+    this.setState({
+      transaction: { ...transaction, date: `${date}T${time}` },
+      isFormVisible: true
+    });
   };
   render() {
+    // console.log(this.state.transaction);
+
     const {
       user,
       transactions,
       isLoaded,
       isFormVisible,
-      transaction
+      transaction,
+      message
     } = this.state;
 
     return isLoaded ? (
       <Container fluid textAlign="center">
         <HeaderComponent username={user.username} balance={user.balance} />
+        {message.text ? (
+          <div className="message-div">
+            <Message
+              positive={message.code === "positive" ? true : false}
+              negative={message.code === "negative" ? true : false}
+            >
+              <Message.Header>{message.text}</Message.Header>
+            </Message>
+          </div>
+        ) : (
+          ""
+        )}
+
         <Button icon onClick={(onclick, e => this.handleFormVisibility(e))}>
           <Icon name={isFormVisible ? "minus" : "plus"} />
         </Button>
 
-        <Transition.Group duration={20} animation="scale">
-          {isFormVisible && (
-            <TransactionForm
-              transaction={transaction}
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-            />
-          )}
-        </Transition.Group>
+        {isFormVisible && (
+          <TransactionForm
+            transaction={transaction}
+            handleSubmit={this.handleSubmit}
+            handleChange={this.handleChange}
+          />
+        )}
 
         {transactions.map(transaction => {
           return (
             <Transaction
+              // handleDetailsClick={this.handleDetailsClick}
+              handleEdit={this.handleEdit}
               transaction={transaction}
               handleDelete={this.handleDelete}
               key={transaction.id}
