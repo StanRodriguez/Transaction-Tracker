@@ -169,14 +169,39 @@ class App extends Component {
           }
         });
   };
-  put = () => {
-    const response = Axios.put("");
+  put = async () => {
+    const { transaction } = this.state;
+    const [date, time] = this.formatToSend();
+    const response = await Axios.put(
+      `user/${this.state.user.id}/transaction/${transaction.id}/put/`,
+      { ...transaction, date, time },
+      { headers: { "X-CSRFToken": csrftoken } }
+    );
+
+    const message = response.data.id
+      ? { text: "Transaction updated successfully", code: "postitive" }
+      : {
+          text: "There was a problem trying to update.",
+          code: "postitive"
+        };
+
+    this.setState({
+      transaction: {
+        date: actualDateTimeInput(),
+        id: "",
+        amount: "",
+        is_expense: true,
+        description: "",
+        comment: ""
+      },
+      isFormVisible: false,
+      message
+    });
+    console.log(response.data);
   };
   handleSubmit = e => {
     e.preventDefault();
-    e.target.id.value ? this.post() : this.update();
-    // e.target.id
-    // this.post();
+    e.target.id.value ? this.put() : this.post();
   };
   // handleDetailsClick = async id => {
   //   const response = await Axios.get(
@@ -198,6 +223,7 @@ class App extends Component {
       transaction: { ...transaction, date: `${date}T${time}` },
       isFormVisible: true
     });
+    window.scrollTo(0, 0);
   };
   render() {
     // console.log(this.state.transaction);

@@ -39,7 +39,13 @@ def transaction_post(request, user_id):
             return JsonResponse({"id": 0}, safe=False)
 
 
-def transaction_details(request, transaction_id, user_id):
-    transaction = Transaction.objects.get(id=transaction_id, user_id=user_id)
+# def transaction_details(request, transaction_id, user_id):
+#     transaction = Transaction.objects.get(id=transaction_id, user_id=user_id)
 
-    return JsonResponse({"id": transaction.id, "amount": transaction.amount, "description": transaction.description, "comment": transaction.comment, "date": transaction.date, "time": transaction.time, "is_expense": transaction.is_expense}, safe=False)
+#     return JsonResponse({"id": transaction.id, "amount": transaction.amount, "description": transaction.description, "comment": transaction.comment, "date": transaction.date, "time": transaction.time, "is_expense": transaction.is_expense}, safe=False)
+def transaction_put(request, user_id, transaction_id):
+    data = json.loads(request.body)
+    transaction = Transaction(id=transaction_id, user_id=user_id,
+                              amount=data["amount"], description=data['description'], comment=data['comment'], date=data['date'], time=data['time'], is_expense=data['is_expense'])
+    transaction.save()
+    return JsonResponse({"id": transaction.id}, safe=False)
