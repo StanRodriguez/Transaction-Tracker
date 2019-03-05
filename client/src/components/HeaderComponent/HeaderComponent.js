@@ -2,7 +2,7 @@ import React from "react";
 import "./HeaderComponent.css";
 const HeaderComponent = ({ balance, username }) => {
   return (
-    <header className="header">
+    <header className="header-component">
       <h3>Welcome, {username}!</h3> <h3> Balance: ${balance}</h3>
     </header>
   );

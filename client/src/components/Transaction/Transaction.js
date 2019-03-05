@@ -7,19 +7,21 @@ const Transaction = ({ transaction, handleDelete, handleEdit }) => {
   const { amount, description, date, time } = transaction;
 
   return (
-    <Segment>
-      <h3>Date: {formatCompleteDate(time, date)}</h3>
-      <h3>${amount} </h3>
-      <p>{description}</p>
+    <div className="column">
+      <Segment>
+        <h3>Date: {formatCompleteDate(time, date)}</h3>
+        <h3>${amount} </h3>
+        <p>{description}</p>
 
-      <TransactionDetails
-        transaction={transaction}
-        // handleDetailsClick={handleDetailsClick}
-        handleDelete={handleDelete}
-        handleEdit={handleEdit}
-        // id={id}
-      />
-    </Segment>
+        <TransactionDetails
+          transaction={transaction}
+          // handleDetailsClick={handleDetailsClick}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+          // id={id}
+        />
+      </Segment>
+    </div>
   );
 };
 export default Transaction;

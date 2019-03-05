@@ -5,6 +5,9 @@
   animation-direction: normal;
   animation-fill-mode: forwards;
 }
+body {
+  text-align: center;
+}
 @keyframes transactions {
   0% {
     opacity: 0;
@@ -15,5 +18,6 @@
   100% {
     visibility: hidden;
     display: none;
+    overflow: hidden;
   }
 }

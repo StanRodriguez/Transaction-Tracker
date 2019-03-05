@@ -97,7 +97,12 @@ class App extends Component {
       this.setState({
         user,
         transactions,
-        isLoaded: true
+        isLoaded: true,
+        message: {
+          text:
+            "You are currently offline. You are in read-only mode. Make sure you are online and reload.",
+          code: "negative"
+        }
       });
     }
   };
@@ -297,66 +302,70 @@ class App extends Component {
     console.log(dateFilter);
 
     return isLoaded ? (
-      <Container fluid textAlign="center">
+      <React.Fragment>
         <HeaderComponent username={user.username} balance={user.balance} />
-        {message.text ? (
-          <div className="message-div">
-            <Message
-              positive={message.code === "positive" ? true : false}
-              negative={message.code === "negative" ? true : false}
+        <div className="ui container fluid">
+          {message.text ? (
+            <div className="message-div">
+              <Message
+                positive={message.code === "positive" ? true : false}
+                negative={message.code === "negative" ? true : false}
+              >
+                <Message.Header>{message.text}</Message.Header>
+              </Message>
+            </div>
+          ) : (
+            ""
+          )}
+
+          <Button icon onClick={(onclick, this.handleFormVisibility)}>
+            <Icon name={isFormVisible ? "minus" : "plus"} />
+          </Button>
+          <br />
+
+          {isFormVisible && (
+            <TransactionForm
+              transaction={transaction}
+              handleSubmit={this.handleSubmit}
+              handleChange={this.handleChange}
+            />
+          )}
+
+          <div className="ui label ">
+            <i className="filter icon" /> Filter:{" "}
+            <select
+              className="ui dropdown "
+              value={filter}
+              onChange={this.handleFilter}
+              name="date-filter-select"
             >
-              <Message.Header>{message.text}</Message.Header>
-            </Message>
+              {dateFilter.map((filter, i) => {
+                return (
+                  <option key={i} value={filter.value}>
+                    {filter.text}
+                  </option>
+                );
+              })}
+            </select>
           </div>
-        ) : (
-          ""
-        )}
-
-        <Button icon onClick={(onclick, this.handleFormVisibility)}>
-          <Icon name={isFormVisible ? "minus" : "plus"} />
-        </Button>
-        <br />
-
-        {isFormVisible && (
-          <TransactionForm
-            transaction={transaction}
-            handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange}
-          />
-        )}
-
-        <div className="ui label ">
-          <i className="filter icon" /> Filter:{" "}
-          <select
-            className="ui dropdown "
-            value={filter}
-            onChange={this.handleFilter}
-            name="date-filter-select"
-          >
-            {dateFilter.map((filter, i) => {
+          <div className="ui input">
+            <input type="text" placeholder="Search..." />
+          </div>
+          <div className="ui stackable three column grid transactions">
+            {transactions.map(transaction => {
               return (
-                <option key={i} value={filter.value}>
-                  {filter.text}
-                </option>
+                <Transaction
+                  // handleDetailsClick={this.handleDetailsClick}
+                  handleEdit={this.handleEdit}
+                  transaction={transaction}
+                  handleDelete={this.handleDelete}
+                  key={transaction.id}
+                />
               );
             })}
-          </select>
+          </div>
         </div>
-        <div className="ui input">
-          <input type="text" placeholder="Search..." />
-        </div>
-        {transactions.map(transaction => {
-          return (
-            <Transaction
-              // handleDetailsClick={this.handleDetailsClick}
-              handleEdit={this.handleEdit}
-              transaction={transaction}
-              handleDelete={this.handleDelete}
-              key={transaction.id}
-            />
-          );
-        })}
-      </Container>
+      </React.Fragment>
     ) : (
       <Dimmer active inverted>
         <Loader inverted content="Loading" />
