@@ -61,6 +61,13 @@ const actualDateTimeInput = () => {
 
   return dateTimeArray.join("");
 };
-
+const todayDateOnly = () => {
+  return new Date().toISOString().split("T")[0];
+};
+const dateAgo = daysAgo => {
+  var d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  return d.toISOString().split("T")[0];
+};
 // export default formatTime;
-export { formatCompleteDate, actualDateTimeInput };
+export { formatCompleteDate, actualDateTimeInput, todayDateOnly, dateAgo };

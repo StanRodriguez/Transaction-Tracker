@@ -9,13 +9,17 @@ import {
   Loader,
   Icon,
   Button,
-  Transition,
   Message
 } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 
 import { Cookies } from "react-cookie";
 import TransactionForm from "./components/TransactionForm/TransactionForm";
-import { actualDateTimeInput } from "./helperFunctions/formatTime";
+import {
+  actualDateTimeInput,
+  todayDateOnly,
+  dateAgo
+} from "./helperFunctions/formatTime";
 
 const cookies = new Cookies();
 const csrftoken = cookies.get("csrftoken");
@@ -37,10 +41,46 @@ class App extends Component {
       text: "",
       code: 0
     },
+    dateFilter: [
+      { key: "TO", text: "Today", value: todayDateOnly() },
+      { key: "TR", text: "Three days ago", value: dateAgo(3) },
+      {
+        key: "WE",
+        text: "A week ago",
+        value: dateAgo(7)
+      },
+      {
+        key: "FI",
+        text: "Two weeks ago",
+        value: dateAgo(15)
+      },
+      {
+        key: "MO",
+        text: "A month ago",
+        value: dateAgo(30)
+      },
+      {
+        key: "SM",
+        text: "Six Months ago",
+        value: dateAgo(183)
+      },
+      {
+        key: "YE",
+        text: "A year ago",
+        value: dateAgo(365)
+      }
+    ],
+    filter: dateAgo(3),
     isFormVisible: false
   };
-  getTransactions = async id => {
-    const response = await Axios(`/user/${id}/transactions/`);
+  getTransactions = async (
+    id,
+    fromDate = dateAgo(3),
+    toDate = todayDateOnly()
+  ) => {
+    const response = await Axios(
+      `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
+    );
     const { user, transactions } = response.data;
     this.setState({
       user,
@@ -49,7 +89,7 @@ class App extends Component {
     });
   };
   componentDidMount() {
-    this.getTransactions(2);
+    this.getTransactions(2, this.state.filter);
   }
   delete = async id => {
     try {
@@ -141,33 +181,28 @@ class App extends Component {
       headers: { "X-CSRFToken": csrftoken }
     });
     console.log(response.data.id);
-    response.data.id
-      ? this.setState({
-          transaction: {
-            date: actualDateTimeInput(),
-            amount: "",
-            is_expense: true,
-            description: "",
-            comment: ""
-          },
-          message: {
-            text: "Transaction created successfully",
-            code: "positive"
-          }
-        })
-      : this.setState({
-          transaction: {
-            date: actualDateTimeInput(),
-            amount: "",
-            is_expense: true,
-            description: "",
-            comment: ""
-          },
-          message: {
-            text: "There was a problem trying to create",
-            code: "negative"
-          }
-        });
+    const message = response.data.id
+      ? {
+          text: "Transaction created successfully",
+          code: "positive"
+        }
+      : {
+          text: "There was a problem trying to create",
+          code: "negative"
+        };
+    this.setState({
+      transaction: {
+        id: "",
+        date: actualDateTimeInput(),
+        amount: "",
+        is_expense: true,
+        description: "",
+        comment: ""
+      },
+      message,
+      isFormVisible: false
+    });
+    this.getTransactions(2);
   };
   put = async () => {
     const { transaction } = this.state;
@@ -179,10 +214,10 @@ class App extends Component {
     );
 
     const message = response.data.id
-      ? { text: "Transaction updated successfully", code: "postitive" }
+      ? { text: "Transaction updated successfully", code: "positive" }
       : {
           text: "There was a problem trying to update.",
-          code: "postitive"
+          code: "negative"
         };
 
     this.setState({
@@ -198,6 +233,7 @@ class App extends Component {
       message
     });
     console.log(response.data);
+    this.getTransactions(2);
   };
   handleSubmit = e => {
     e.preventDefault();
@@ -225,6 +261,12 @@ class App extends Component {
     });
     window.scrollTo(0, 0);
   };
+  handleFilter = e => {
+    this.getTransactions(this.state.user.id, e.target.value);
+    this.setState({
+      filter: e.target.value
+    });
+  };
   render() {
     // console.log(this.state.transaction);
 
@@ -234,8 +276,11 @@ class App extends Component {
       isLoaded,
       isFormVisible,
       transaction,
-      message
+      message,
+      dateFilter,
+      filter
     } = this.state;
+    console.log(dateFilter);
 
     return isLoaded ? (
       <Container fluid textAlign="center">
@@ -253,9 +298,10 @@ class App extends Component {
           ""
         )}
 
-        <Button icon onClick={(onclick, e => this.handleFormVisibility(e))}>
+        <Button icon onClick={(onclick, this.handleFormVisibility)}>
           <Icon name={isFormVisible ? "minus" : "plus"} />
         </Button>
+        <br />
 
         {isFormVisible && (
           <TransactionForm
@@ -265,6 +311,26 @@ class App extends Component {
           />
         )}
 
+        <div className="ui label ">
+          <i className="filter icon" /> Filter:{" "}
+          <select
+            className="ui dropdown "
+            value={filter}
+            onChange={this.handleFilter}
+            name="date-filter-select"
+          >
+            {dateFilter.map((filter, i) => {
+              return (
+                <option key={i} value={filter.value}>
+                  {filter.text}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div class="ui input">
+          <input type="text" placeholder="Search..." />
+        </div>
         {transactions.map(transaction => {
           return (
             <Transaction

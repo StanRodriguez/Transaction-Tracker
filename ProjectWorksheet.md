@@ -43,7 +43,7 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 - The user can delete incomes. &#10003;
 - The user can delete expenses. &#10003;
 - The user can see their balance. &#10003;
-- The user can see the transaction details.
+- The user can see the transaction details. &#10003;
 
 #### PostMVP
 
@@ -51,8 +51,8 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 - Image uploading.
 - History.
 - Session handling.
-- Edit incomes.
-- Edit expenses.
+- Edit incomes. &#10003;
+- Edit expenses. &#10003;
 - search.
 - Date filter.
 - Dom Virtualization.

@@ -49,3 +49,11 @@ def transaction_put(request, user_id, transaction_id):
                               amount=data["amount"], description=data['description'], comment=data['comment'], date=data['date'], time=data['time'], is_expense=data['is_expense'])
     transaction.save()
     return JsonResponse({"id": transaction.id}, safe=False)
+
+
+def transactions_date(request, user_id, fromDate, toDate):
+
+    user = User.objects.get(id=user_id)
+    transaction = list(user.transaction_set.filter(date__gte=fromDate, date__lte=toDate).order_by('-date', '-time').values(
+        'id', 'amount', 'is_expense', 'comment', 'description', 'date', 'time'))
+    return JsonResponse({'user': {'id': user.id, 'username': user.username, 'balance': user.balance}, 'transactions': transaction}, safe=False)
