@@ -3,14 +3,7 @@ import "./App.css";
 import Axios from "axios";
 import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
-import {
-  Container,
-  Dimmer,
-  Loader,
-  Icon,
-  Button,
-  Message
-} from "semantic-ui-react";
+import { Dimmer, Loader, Icon, Button, Message } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
 import { Cookies } from "react-cookie";
@@ -20,13 +13,20 @@ import {
   todayDateOnly,
   dateAgo
 } from "./helperFunctions/formatTime";
+import LogIn from "./components/LogIn/LogIn";
 
 const cookies = new Cookies();
 const csrftoken = cookies.get("csrftoken");
 
 class App extends Component {
   state = {
-    user: {},
+    user: {
+      id: 0,
+      username: "",
+      password: "",
+      balance: 0
+    },
+    isLoggedIn: false,
     transactions: [],
     transaction: {
       date: actualDateTimeInput(),
@@ -83,19 +83,16 @@ class App extends Component {
       const response = await Axios(
         `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
       );
-      const { user, transactions } = response.data;
+      const { transactions } = response.data;
       this.setState({
-        user,
         transactions,
         isLoaded: true
       });
       localStorage.setItem("transactions", JSON.stringify(transactions));
-      localStorage.setItem("user", JSON.stringify(user));
     } else {
       const transactions = JSON.parse(localStorage.getItem("transactions"));
-      const user = JSON.parse(localStorage.getItem("user"));
+
       this.setState({
-        user,
         transactions,
         isLoaded: true,
         message: {
@@ -106,8 +103,21 @@ class App extends Component {
       });
     }
   };
+
   componentDidMount() {
-    this.getTransactions(2, this.state.filter);
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (user) {
+      this.setState(prevState => {
+        return {
+          user: {
+            ...user,
+            password: prevState.user.password
+          },
+          isLoggedIn: true
+        };
+      });
+      this.getTransactions(user.id);
+    }
   }
 
   delete = async id => {
@@ -221,7 +231,7 @@ class App extends Component {
       message,
       isFormVisible: false
     });
-    this.getTransactions(2);
+    this.getTransactions(this.state.user.id);
   };
   put = async () => {
     const { transaction } = this.state;
@@ -252,24 +262,75 @@ class App extends Component {
       message
     });
     console.log(response.data);
-    this.getTransactions(2);
+    this.getTransactions(this.state.user.id);
   };
   handleSubmit = e => {
     e.preventDefault();
     e.target.id.value ? this.put() : this.post();
   };
-  // handleDetailsClick = async id => {
-  //   const response = await Axios.get(
-  //     `user/${this.state.user.id}/transaction/${id}/details/`
-  //   );
-  //   console.log(response.data);
+  handleLogIn = async e => {
+    e.preventDefault();
+    if (navigator.onLine) {
+      const { username, password } = this.state.user;
+      const response = await Axios.post(
+        "/user/auth",
+        { username, password },
+        { headers: { "X-CSRFToken": csrftoken } }
+      );
 
-  //   this.setState({
-  //     transaction: {
-  //       ...response.data
-  //     }
-  //   });
-  // };
+      if (response.data.user) {
+        const { user } = response.data;
+        this.getTransactions(user.id, this.state.filter);
+        sessionStorage.setItem("user", JSON.stringify(user));
+        this.setState(prevState => {
+          return {
+            user: {
+              ...user,
+              password: prevState.user.password
+            },
+            isLoggedIn: true
+          };
+        });
+      } else {
+        console.log("you are not login");
+      }
+    } else {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      this.setState(prevState => {
+        return {
+          user: {
+            ...user,
+            password: prevState.user.password
+          },
+          isLoggedIn: true
+        };
+      });
+    }
+  };
+  handleLogOut = () => {
+    sessionStorage.clear();
+    console.log("pres");
+    this.setState({
+      user: {
+        id: 0,
+        username: "",
+        password: "",
+        balance: 0
+      },
+      isLoggedIn: false
+    });
+  };
+  handleChangeLogIn = e => {
+    const { name, value } = e.target;
+    this.setState(prevState => {
+      return {
+        user: {
+          ...prevState.user,
+          [name]: value
+        }
+      };
+    });
+  };
   handleEdit = transaction => {
     const { date, time } = transaction;
     console.log(`${date}T${time}`);
@@ -297,80 +358,95 @@ class App extends Component {
       transaction,
       message,
       dateFilter,
-      filter
+      filter,
+      isLoggedIn
     } = this.state;
-    console.log(dateFilter);
+    console.log(isLoggedIn);
 
-    return isLoaded ? (
-      <React.Fragment>
-        <HeaderComponent username={user.username} balance={user.balance} />
-        <div className="ui container fluid">
-          {message.text ? (
-            <div className="message-div">
-              <Message
-                positive={message.code === "positive" ? true : false}
-                negative={message.code === "negative" ? true : false}
-              >
-                <Message.Header>{message.text}</Message.Header>
-              </Message>
+    if (isLoggedIn) {
+      return isLoaded ? (
+        <React.Fragment>
+          <HeaderComponent
+            handle
+            handleLogOut={this.handleLogOut}
+            username={user.username}
+            balance={user.balance}
+          />
+          <div className="ui container fluid">
+            {message.text ? (
+              <div className="message-div">
+                <Message
+                  positive={message.code === "positive" ? true : false}
+                  negative={message.code === "negative" ? true : false}
+                >
+                  <Message.Header>{message.text}</Message.Header>
+                </Message>
+              </div>
+            ) : (
+              ""
+            )}
+            <Button icon onClick={(onclick, this.handleFormVisibility)}>
+              <Icon name={isFormVisible ? "minus" : "plus"} />
+            </Button>
+            <br />
+            {isFormVisible && (
+              <TransactionForm
+                transaction={transaction}
+                handleSubmit={this.handleSubmit}
+                handleChange={this.handleChange}
+              />
+            )}
+            <div className="date-filter">
+              <div className="ui label ">
+                <i className="filter icon" /> Filter:{" "}
+                <select
+                  className="ui dropdown "
+                  value={filter}
+                  onChange={this.handleFilter}
+                  name="date-filter-select"
+                >
+                  {dateFilter.map((filter, i) => {
+                    return (
+                      <option key={i} value={filter.value}>
+                        {filter.text}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
-          ) : (
-            ""
-          )}
-
-          <Button icon onClick={(onclick, this.handleFormVisibility)}>
-            <Icon name={isFormVisible ? "minus" : "plus"} />
-          </Button>
-          <br />
-
-          {isFormVisible && (
-            <TransactionForm
-              transaction={transaction}
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-            />
-          )}
-
-          <div className="ui label ">
-            <i className="filter icon" /> Filter:{" "}
-            <select
-              className="ui dropdown "
-              value={filter}
-              onChange={this.handleFilter}
-              name="date-filter-select"
-            >
-              {dateFilter.map((filter, i) => {
+            <div className="ui input search-filter">
+              <input type="text" placeholder="Search..." />
+            </div>
+            <div className="ui stackable three column grid transactions">
+              {transactions.map(transaction => {
                 return (
-                  <option key={i} value={filter.value}>
-                    {filter.text}
-                  </option>
+                  <Transaction
+                    // handleDetailsClick={this.handleDetailsClick}
+                    handleEdit={this.handleEdit}
+                    transaction={transaction}
+                    handleDelete={this.handleDelete}
+                    key={transaction.id}
+                  />
                 );
               })}
-            </select>
+            </div>
           </div>
-          <div className="ui input">
-            <input type="text" placeholder="Search..." />
-          </div>
-          <div className="ui stackable three column grid transactions">
-            {transactions.map(transaction => {
-              return (
-                <Transaction
-                  // handleDetailsClick={this.handleDetailsClick}
-                  handleEdit={this.handleEdit}
-                  transaction={transaction}
-                  handleDelete={this.handleDelete}
-                  key={transaction.id}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </React.Fragment>
-    ) : (
-      <Dimmer active inverted>
-        <Loader inverted content="Loading" />
-      </Dimmer>
-    );
+        </React.Fragment>
+      ) : (
+        <Dimmer active inverted>
+          <Loader inverted content="Loading" />
+        </Dimmer>
+      );
+    } else {
+      return (
+        <LogIn
+          user={user}
+          handleChangeLogIn={this.handleChangeLogIn}
+          handleLogIn={this.handleLogIn}
+        />
+      );
+    }
   }
 }
 

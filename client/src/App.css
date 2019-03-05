@@ -5,6 +5,12 @@
   animation-direction: normal;
   animation-fill-mode: forwards;
 }
+.date-filter {
+  margin: 10px;
+}
+.search-filter {
+  margin: 10px;
+}
 body {
   text-align: center;
 }
