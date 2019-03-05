@@ -1,6 +1,7 @@
 .message-div {
+  display: absolute;
   animation-name: transactions;
-  animation-duration: 2s;
+  animation-duration: 5s;
   animation-direction: normal;
   animation-fill-mode: forwards;
 }
@@ -8,7 +9,11 @@
   0% {
     opacity: 0;
   }
-  100% {
+  60% {
     opacity: 1;
+  }
+  100% {
+    visibility: hidden;
+    display: none;
   }
 }

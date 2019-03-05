@@ -71,26 +71,40 @@ class App extends Component {
       }
     ],
     filter: dateAgo(3),
-    isFormVisible: false
+    isFormVisible: false,
+    isOnline: false
   };
   getTransactions = async (
     id,
     fromDate = dateAgo(3),
     toDate = todayDateOnly()
   ) => {
-    const response = await Axios(
-      `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
-    );
-    const { user, transactions } = response.data;
-    this.setState({
-      user,
-      transactions,
-      isLoaded: true
-    });
+    if (navigator.onLine) {
+      const response = await Axios(
+        `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
+      );
+      const { user, transactions } = response.data;
+      this.setState({
+        user,
+        transactions,
+        isLoaded: true
+      });
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      const transactions = JSON.parse(localStorage.getItem("transactions"));
+      const user = JSON.parse(localStorage.getItem("user"));
+      this.setState({
+        user,
+        transactions,
+        isLoaded: true
+      });
+    }
   };
   componentDidMount() {
     this.getTransactions(2, this.state.filter);
   }
+
   delete = async id => {
     try {
       const response = await Axios({
@@ -328,7 +342,7 @@ class App extends Component {
             })}
           </select>
         </div>
-        <div class="ui input">
+        <div className="ui input">
           <input type="text" placeholder="Search..." />
         </div>
         {transactions.map(transaction => {

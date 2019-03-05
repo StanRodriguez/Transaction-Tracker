@@ -54,7 +54,7 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 - Edit incomes. &#10003;
 - Edit expenses. &#10003;
 - search.
-- Date filter.
+- Date filter. &#10003;
 - Dom Virtualization.
 
 ## [React Architectural Design](https://photos.app.goo.gl/y5c3GFojTMtRKcVj6)

@@ -1,10 +1,10 @@
 import React from "react";
-import { Header } from "semantic-ui-react";
+import "./HeaderComponent.css";
 const HeaderComponent = ({ balance, username }) => {
   return (
-    <Header>
-      Welcome, {username}! your balance is ${balance}
-    </Header>
+    <header className="header">
+      <h3>Welcome, {username}!</h3> <h3> Balance: ${balance}</h3>
+    </header>
   );
 };
 export default HeaderComponent;
