@@ -1,8 +1,9 @@
 import React from "react";
+import "./SignUp.css";
 
 const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
   return (
-    <form className="ui form" onSubmit={handleSubmitSignup}>
+    <form className="ui form signup-form" onSubmit={handleSubmitSignup}>
       <h4 className="ui dividing header">Sign Up</h4>
       <div className="field">
         <input
@@ -52,7 +53,16 @@ const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
         />
       </div>
       <div className="field">
-        <button className="ui button primary">Sign Up</button>
+        <input
+          type="password"
+          name="repeat_password"
+          onChange={handleChangeLogIn}
+          value={user.repeat_password}
+          placeholder="Repeat password"
+        />
+      </div>
+      <div className="field">
+        <button className="ui button secondary">Sign Up</button>
       </div>
     </form>
   );

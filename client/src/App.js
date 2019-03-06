@@ -28,6 +28,7 @@ class App extends Component {
       email: "",
       username: "",
       password: "",
+      repeat_password: "",
       balance: 0
     },
     isLoggedIn: false,
