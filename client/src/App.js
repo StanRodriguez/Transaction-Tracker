@@ -296,7 +296,7 @@ class App extends Component {
     if (navigator.onLine) {
       const { username, password } = this.state.user;
       const response = await Axios.post(
-        "/user/auth",
+        `/user/auth/`,
         { username, password },
         { headers: { "X-CSRFToken": csrftoken } }
       );
@@ -409,7 +409,7 @@ class App extends Component {
           last_name
         } = this.state.SignUpUser;
         const response = await Axios.post(
-          "/user/new",
+          "/user/new/",
           { username, email, password, first_name, last_name },
           { headers: { "X-CSRFToken": csrftoken } }
         );

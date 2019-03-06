@@ -26,6 +26,6 @@ urlpatterns = [
     path('user/<user_id>/transaction/post/', transaction_post),
     # path('user/<user_id>/transaction/<transaction_id>/details/', transaction_details),
     path('user/<user_id>/transaction/<transaction_id>/put/', transaction_put),
-    path('user/auth', user_auth),
-    path('user/new', user_post),
+    path('user/auth/', user_auth),
+    path('user/new/', user_post),
 ]

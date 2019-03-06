@@ -5,6 +5,8 @@ from django.core import serializers
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
 import json
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
@@ -69,9 +71,11 @@ def transactions_date(request, user_id, fromDate, toDate):
     return JsonResponse({'user': {'balance': user.balance}, 'transactions': transaction}, safe=False)
 
 
+@csrf_exempt
 def user_auth(request):
     data = json.loads(request.body)
     user = authenticate(username=data['username'], password=data['password'])
+    # user = authenticate(username=username, password=password)
     if user is not None:
         response = {"error": 0, "user": user}
         return JsonResponse({"error": 0, 'user': {'id': user.id, 'username': user.username,  'balance': user.balance}})
@@ -81,6 +85,7 @@ def user_auth(request):
         return JsonResponse(response)
 
 
+@csrf_exempt
 def user_post(request):
     data = json.loads(request.body)
     user = User.objects.create_user(
