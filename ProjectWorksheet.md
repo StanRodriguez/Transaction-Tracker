@@ -11,9 +11,9 @@ You are **responsible** for scheduling time with your squad to seek approval for
 | Day 1 | Project Description                                  | Complete   |
 | Day 1 | Wireframes / Priority Matrix / Functional Components | Complete   |
 | Day 2 | Core Application Structure (HTML, CSS, etc.)         | Complete   |
-| Day 3 | Pseudocode / actual code                             | Incomplete |
-| Day 3 | Initial Clickable Model                              | Incomplete |
-| Day 4 | MVP                                                  | Incomplete |
+| Day 3 | Pseudocode / actual code                             | Complete   |
+| Day 3 | Initial Clickable Model                              | Complete   |
+| Day 4 | MVP                                                  | Complete   |
 | Day 5 | Present                                              | Incomplete |
 
 ## Project Description
@@ -47,13 +47,13 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 
 #### PostMVP
 
-- User login.
+- User login. &#10003;
 - Image uploading.
 - History.
 - Session handling.
 - Edit incomes. &#10003;
 - Edit expenses. &#10003;
-- search.
+- search. &#10003;
 - Date filter. &#10003;
 - Dom Virtualization.
 
@@ -65,17 +65,15 @@ The functionality will then be divided into two separate lists: MPV and PostMVP.
 
 Based on the initial logic defined in the previous sections try and breakdown the logic further into stateless/stateful components.
 
-| Component         |                              Description                              |
-| ----------------- | :-------------------------------------------------------------------: |
-| App               |                      Serves as a main container.                      |
-| Header            |                       Renders the user balance.                       |
-| Dashboard         |            Renders all your transactions from a week ago.             |
-| Transaction       |                  Renders short summary transaction.                   |
-| TransactionDetail |           Renders all the transaction-related information.            |
-| NewTransaction    |                   Create an income and/or expense.                    |
-| History           | Hold the static information for all the transactions in a given time. |
-| Table             |           Serves a header to grab the transaction details.            |
-| TableRow          |                        Render each transaction                        |
+| Component          |                      Description                       |
+| ------------------ | :----------------------------------------------------: |
+| App                |              Serves as a main container.               |
+| HeaderComponent    | Renders the username, user balance and log out button. |
+| LogIn              |                      Log in form                       |
+| SignUp             |                   Creates a new user                   |
+| Transaction        |              Renders a single transaction              |
+| TransactionDetails |             Gives you transaction details              |
+| TransactionForm    |            Creates or updates a transaction            |
 
 ## Time Frames
 
@@ -83,15 +81,15 @@ Time frames are also key in the development cycle. You have limited time to code
 
 | Component                                | Priority | Estimated Time | Actual Time |
 | ---------------------------------------- | :------: | :------------: | :---------: |
-| HTML/CSS                                 |    H     |      7hrs      |    3hrs     |
-| The user can insert incomes              |    H     |      7hrs      |     hrs     |
-| The user can insert expenses             |    H     |      3hrs      |     hrs     |
-| The user can delete incomes              |    H     |      5hrs      |    5hrs     |
+| HTML/CSS                                 |    H     |      7hrs      |    8hrs     |
+| The user can insert incomes              |    H     |      7hrs      |    7hrs     |
+| The user can insert expenses             |    H     |      3hrs      |    6hrs     |
+| The user can delete incomes              |    H     |      5hrs      |    4hrs     |
 | The user can delete expenses             |    H     |      3hrs      |    1hrs     |
-| The user can see their balance           |    H     |      2hrs      |    3hrs     |
-| The user can see the transaction details |    M     |      5hrs      |     hrs     |
-| PostMVPs                                 |    L     |     20hrs      |     hrs     |
-| Total                                    |          |     52hrs      |     hrs     |
+| The user can see their balance           |    H     |      2hrs      |    2hrs     |
+| The user can see the transaction details |    M     |      5hrs      |    4hrs     |
+| PostMVPs                                 |    L     |     20hrs      |    15hrs    |
+| Total                                    |          |     52hrs      |    47hrs    |
 
 ## Helper Functions
 
@@ -107,6 +105,7 @@ Use this section to list all supporting libraries and thier role in the project.
 
 | Library           |             What it Does              |
 | ----------------- | :-----------------------------------: |
+| React             |  Control the view in your front end   |
 | Semantic UI       |       For a responsive approach       |
 | Django            |  Back-end framework built in Python   |
 | react-cookie      |      Work with cookies in react       |
