@@ -1,9 +1,15 @@
 import React from "react";
 import "./SignUp.css";
 
-const SignUp = ({ SignUpUser, handleChangeSignUp, handleSubmitSignup }) => {
+const SignUp = ({
+  SignUpUser,
+  handleChangeSignUp,
+  handleSubmitSignup,
+  passwordMatch,
+  handleBlurPasswordMatch
+}) => {
   return (
-    <form className="ui form signup-form" onSubmit={handleSubmitSignup}>
+    <form className="ui form signup-form " onSubmit={handleSubmitSignup}>
       <h4 className="ui dividing header">Sign Up</h4>
       <div className="field">
         <input
@@ -23,7 +29,7 @@ const SignUp = ({ SignUpUser, handleChangeSignUp, handleSubmitSignup }) => {
           placeholder="Last Name"
         />
       </div>
-      <div className="field">
+      <div className="required field">
         <input
           type="email"
           value={SignUpUser.email}
@@ -33,7 +39,7 @@ const SignUp = ({ SignUpUser, handleChangeSignUp, handleSubmitSignup }) => {
           placeholder="Email"
         />
       </div>
-      <div className="field">
+      <div className="required field">
         <input
           type="text"
           required
@@ -43,19 +49,25 @@ const SignUp = ({ SignUpUser, handleChangeSignUp, handleSubmitSignup }) => {
           placeholder="Username"
         />
       </div>
-      <div className="field">
+      <div
+        className={passwordMatch ? "required field " : "required field error"}
+      >
         <input
           type="password"
           name="password"
+          onBlur={handleBlurPasswordMatch}
           onChange={handleChangeSignUp}
           value={SignUpUser.password}
           placeholder="Password"
         />
       </div>
-      <div className="field">
+      <div
+        className={passwordMatch ? "required field " : "required field error"}
+      >
         <input
           type="password"
           name="repeat_password"
+          onBlur={handleBlurPasswordMatch}
           onChange={handleChangeSignUp}
           value={SignUpUser.repeat_password}
           placeholder="Repeat password"

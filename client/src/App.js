@@ -81,7 +81,8 @@ class App extends Component {
     filter: dateAgo(3),
     isFormVisible: false,
     isOnline: false,
-    searchFilter: ""
+    searchFilter: "",
+    passwordMatch: true
   };
   getTransactions = async (
     id,
@@ -370,6 +371,7 @@ class App extends Component {
   };
   handleChangeSignUp = e => {
     const { name, value } = e.target;
+
     this.setState(prevState => {
       return {
         SignUpUser: {
@@ -397,27 +399,33 @@ class App extends Component {
   };
   handleSubmitSignup = async e => {
     e.preventDefault();
-    const {
-      username,
-      email,
-      password,
-      first_name,
-      last_name
-    } = this.state.SignUpUser;
-    const response = await Axios.post(
-      "/user/new",
-      { username, email, password, first_name, last_name },
-      { headers: { "X-CSRFToken": csrftoken } }
-    );
-
-    if (response.data.user.id) {
-      this.setState({
-        user: {
+    try {
+      if (this.state.passwordMatch) {
+        const {
           username,
-          password
+          email,
+          password,
+          first_name,
+          last_name
+        } = this.state.SignUpUser;
+        const response = await Axios.post(
+          "/user/new",
+          { username, email, password, first_name, last_name },
+          { headers: { "X-CSRFToken": csrftoken } }
+        );
+
+        if (response.data.user.id) {
+          this.setState({
+            user: {
+              username,
+              password
+            }
+          });
+          this.handleSubmitLogIn();
         }
-      });
-      this.handleSubmitLogIn();
+      }
+    } catch (error) {
+      console.log("There was an error trying to sign up: ", error.message);
     }
   };
   animationEnd = () => {
@@ -434,6 +442,11 @@ class App extends Component {
       searchFilter: value
     });
   };
+  handleBlurPasswordMatch = e => {
+    const { password, repeat_password } = this.state.SignUpUser;
+    const passwordMatch = password === repeat_password;
+    this.setState({ passwordMatch });
+  };
   render() {
     // console.log(this.state.transaction);
 
@@ -448,7 +461,8 @@ class App extends Component {
       filter,
       isLoggedIn,
       SignUpUser,
-      searchFilter
+      searchFilter,
+      passwordMatch
     } = this.state;
 
     if (isLoggedIn) {
@@ -565,6 +579,8 @@ class App extends Component {
             handleSubmitLogIn={this.handleSubmitLogIn}
           />
           <SignUp
+            handleBlurPasswordMatch={this.handleBlurPasswordMatch}
+            passwordMatch={passwordMatch}
             handleSubmitSignup={this.handleSubmitSignup}
             handleChangeSignUp={this.handleChangeSignUp}
             SignUpUser={SignUpUser}
