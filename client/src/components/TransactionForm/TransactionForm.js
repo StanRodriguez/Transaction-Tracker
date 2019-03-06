@@ -12,8 +12,6 @@ import {
 import "./TransactionForm.css";
 
 const TransactionForm = ({ handleSubmit, handleChange, transaction }) => {
-  console.log(transaction);
-
   return (
     <Segment textAlign="center" className="transaction-form">
       <Form onSubmit={handleSubmit}>

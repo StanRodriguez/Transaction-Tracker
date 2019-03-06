@@ -14,6 +14,7 @@ import {
   dateAgo
 } from "./helperFunctions/formatTime";
 import LogIn from "./components/LogIn/LogIn";
+import SignUp from "./components/SignUp/SignUp";
 
 const cookies = new Cookies();
 const csrftoken = cookies.get("csrftoken");
@@ -22,6 +23,9 @@ class App extends Component {
   state = {
     user: {
       id: 0,
+      first_name: "",
+      last_name: "",
+      email: "",
       username: "",
       password: "",
       balance: 0
@@ -145,9 +149,8 @@ class App extends Component {
       window.scrollTo(0, 0);
 
       this.getTransactions(this.state.user.id);
-      console.log(response);
-    } catch (error) {
-      console.error("Error ocurred trying to delete: ", error);
+    } catch (e) {
+      console.error("Error ocurred trying to delete: ", e.message);
     }
   };
   handleDelete = e => {
@@ -200,76 +203,84 @@ class App extends Component {
   };
 
   post = async () => {
-    const { transaction, user } = this.state;
-    const [date, time] = this.formatToSend();
+    try {
+      const { transaction, user } = this.state;
+      const [date, time] = this.formatToSend();
 
-    const response = await Axios({
-      method: "post",
-      url: `user/${user.id}/transaction/post/`,
-      data: { ...transaction, date, time },
-      headers: { "X-CSRFToken": csrftoken }
-    });
-    console.log(response.data.id);
-    const message = response.data.id
-      ? {
-          text: "Transaction created successfully",
-          code: "positive"
-        }
-      : {
-          text: "There was a problem trying to create",
-          code: "negative"
-        };
-    this.setState({
-      transaction: {
-        id: "",
-        date: actualDateTimeInput(),
-        amount: "",
-        is_expense: true,
-        description: "",
-        comment: ""
-      },
-      message,
-      isFormVisible: false
-    });
-    this.getTransactions(this.state.user.id);
+      const response = await Axios({
+        method: "post",
+        url: `user/${user.id}/transaction/post/`,
+        data: { ...transaction, date, time },
+        headers: { "X-CSRFToken": csrftoken }
+      });
+      console.log(response.data);
+      const message = response.data.id
+        ? {
+            text: "Transaction created successfully",
+            code: "positive"
+          }
+        : {
+            text: "There was a problem trying to create",
+            code: "negative"
+          };
+      this.setState({
+        transaction: {
+          id: "",
+          date: actualDateTimeInput(),
+          amount: "",
+          is_expense: true,
+          description: "",
+          comment: ""
+        },
+        message,
+        isFormVisible: false
+      });
+      this.getTransactions(this.state.user.id);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   put = async () => {
-    const { transaction } = this.state;
-    const [date, time] = this.formatToSend();
-    const response = await Axios.put(
-      `user/${this.state.user.id}/transaction/${transaction.id}/put/`,
-      { ...transaction, date, time },
-      { headers: { "X-CSRFToken": csrftoken } }
-    );
+    try {
+      const { transaction } = this.state;
+      const [date, time] = this.formatToSend();
+      const response = await Axios.put(
+        `user/${this.state.user.id}/transaction/${transaction.id}/put/`,
+        { ...transaction, date, time },
+        { headers: { "X-CSRFToken": csrftoken } }
+      );
 
-    const message = response.data.id
-      ? { text: "Transaction updated successfully", code: "positive" }
-      : {
-          text: "There was a problem trying to update.",
-          code: "negative"
-        };
+      const message = response.data.id
+        ? { text: "Transaction updated successfully", code: "positive" }
+        : {
+            text: "There was a problem trying to update.",
+            code: "negative"
+          };
 
-    this.setState({
-      transaction: {
-        date: actualDateTimeInput(),
-        id: "",
-        amount: "",
-        is_expense: true,
-        description: "",
-        comment: ""
-      },
-      isFormVisible: false,
-      message
-    });
-    console.log(response.data);
-    this.getTransactions(this.state.user.id);
+      this.setState({
+        transaction: {
+          date: actualDateTimeInput(),
+          id: "",
+          amount: "",
+          is_expense: true,
+          description: "",
+          comment: ""
+        },
+        isFormVisible: false,
+        message
+      });
+      console.log(response.data);
+      this.getTransactions(this.state.user.id);
+    } catch (e) {
+      console.log(e.message);
+    }
   };
   handleSubmit = e => {
     e.preventDefault();
     e.target.id.value ? this.put() : this.post();
   };
-  handleLogIn = async e => {
-    e.preventDefault();
+  handleSubmitLogIn = async e => {
+    e && e.preventDefault();
     if (navigator.onLine) {
       const { username, password } = this.state.user;
       const response = await Axios.post(
@@ -288,6 +299,10 @@ class App extends Component {
               ...user,
               password: prevState.user.password
             },
+            message: {
+              text: "",
+              code: 0
+            },
             isLoggedIn: true
           };
         });
@@ -302,6 +317,10 @@ class App extends Component {
             ...user,
             password: prevState.user.password
           },
+          message: {
+            text: "",
+            code: 0
+          },
           isLoggedIn: true
         };
       });
@@ -309,7 +328,6 @@ class App extends Component {
   };
   handleLogOut = () => {
     sessionStorage.clear();
-    console.log("pres");
     this.setState({
       user: {
         id: 0,
@@ -347,6 +365,25 @@ class App extends Component {
       filter: e.target.value
     });
   };
+  handleSubmitSignup = async e => {
+    e.preventDefault();
+    const {
+      username,
+      email,
+      password,
+      first_name,
+      last_name
+    } = this.state.user;
+    const response = await Axios.post(
+      "/user/new",
+      { username, email, password, first_name, last_name },
+      { headers: { "X-CSRFToken": csrftoken } }
+    );
+
+    if (response.data.user.id) {
+      this.handleSubmitLogIn();
+    }
+  };
   render() {
     // console.log(this.state.transaction);
 
@@ -361,7 +398,6 @@ class App extends Component {
       filter,
       isLoggedIn
     } = this.state;
-    console.log(isLoggedIn);
 
     if (isLoggedIn) {
       return isLoaded ? (
@@ -440,11 +476,18 @@ class App extends Component {
       );
     } else {
       return (
-        <LogIn
-          user={user}
-          handleChangeLogIn={this.handleChangeLogIn}
-          handleLogIn={this.handleLogIn}
-        />
+        <div className="ui container">
+          <LogIn
+            user={user}
+            handleChangeLogIn={this.handleChangeLogIn}
+            handleSubmitLogIn={this.handleSubmitLogIn}
+          />
+          <SignUp
+            handleSubmitSignup={this.handleSubmitSignup}
+            handleChangeLogIn={this.handleChangeLogIn}
+            user={user}
+          />
+        </div>
       );
     }
   }
