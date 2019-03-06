@@ -23,7 +23,6 @@ class App extends Component {
   state = {
     user: {
       id: 0,
-
       username: "",
       password: "",
       balance: 0
@@ -82,7 +81,8 @@ class App extends Component {
     ],
     filter: dateAgo(3),
     isFormVisible: false,
-    isOnline: false
+    isOnline: false,
+    searchFilter: ""
   };
   getTransactions = async (
     id,
@@ -415,6 +415,20 @@ class App extends Component {
       this.handleSubmitLogIn();
     }
   };
+  animationEnd = () => {
+    this.setState({
+      message: {
+        text: "",
+        code: ""
+      }
+    });
+  };
+  handleChangeSearchFilter = e => {
+    const { value } = e.target;
+    this.setState({
+      searchFilter: value
+    });
+  };
   render() {
     // console.log(this.state.transaction);
 
@@ -428,7 +442,8 @@ class App extends Component {
       dateFilter,
       filter,
       isLoggedIn,
-      SignUpUser
+      SignUpUser,
+      searchFilter
     } = this.state;
 
     if (isLoggedIn) {
@@ -440,7 +455,10 @@ class App extends Component {
             username={user.username}
             balance={user.balance}
           />
-          <div className="ui container fluid">
+          <div
+            className="ui container fluid"
+            onAnimationEnd={this.animationEnd}
+          >
             {message.text ? (
               <div className="message-div">
                 <Message
@@ -484,20 +502,43 @@ class App extends Component {
               </div>
             </div>
             <div className="ui input search-filter">
-              <input type="text" placeholder="Search..." />
+              <input
+                onChange={this.handleChangeSearchFilter}
+                type="text"
+                name="searchFilter"
+                value={searchFilter}
+                placeholder="Search..."
+              />
             </div>
             <div className="ui stackable three column grid transactions">
-              {transactions.map(transaction => {
-                return (
-                  <Transaction
-                    // handleDetailsClick={this.handleDetailsClick}
-                    handleEdit={this.handleEdit}
-                    transaction={transaction}
-                    handleDelete={this.handleDelete}
-                    key={transaction.id}
-                  />
-                );
-              })}
+              {searchFilter
+                ? transactions
+                    .filter(
+                      transaction =>
+                        transaction.description
+                          .toLocaleLowerCase()
+                          .includes(searchFilter.toLocaleLowerCase()) ||
+                        transaction.date.includes(searchFilter) ||
+                        transaction.amount.includes(searchFilter)
+                    )
+                    .map(transaction => (
+                      <Transaction
+                        // handleDetailsClick={this.handleDetailsClick}
+                        handleEdit={this.handleEdit}
+                        transaction={transaction}
+                        handleDelete={this.handleDelete}
+                        key={transaction.id}
+                      />
+                    ))
+                : transactions.map(transaction => (
+                    <Transaction
+                      // handleDetailsClick={this.handleDetailsClick}
+                      handleEdit={this.handleEdit}
+                      transaction={transaction}
+                      handleDelete={this.handleDelete}
+                      key={transaction.id}
+                    />
+                  ))}
             </div>
           </div>
         </React.Fragment>
