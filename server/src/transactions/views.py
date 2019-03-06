@@ -71,7 +71,6 @@ def transactions_date(request, user_id, fromDate, toDate):
 
 def user_auth(request):
     data = json.loads(request.body)
-    print(data['username'], data['password'])
     user = authenticate(username=data['username'], password=data['password'])
     if user is not None:
         response = {"error": 0, "user": user}

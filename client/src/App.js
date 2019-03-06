@@ -573,6 +573,7 @@ class App extends Component {
     } else {
       return (
         <div className="ui container">
+          <h1 className="ui header app-title-h1">Simple Tracker</h1>
           <LogIn
             user={user}
             handleChangeLogIn={this.handleChangeLogIn}
