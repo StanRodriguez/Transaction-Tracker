@@ -1,15 +1,15 @@
 import React from "react";
 import "./SignUp.css";
 
-const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
+const SignUp = ({ SignUpUser, handleChangeSignUp, handleSubmitSignup }) => {
   return (
     <form className="ui form signup-form" onSubmit={handleSubmitSignup}>
       <h4 className="ui dividing header">Sign Up</h4>
       <div className="field">
         <input
           type="text"
-          value={user.first_name}
-          onChange={handleChangeLogIn}
+          value={SignUpUser.first_name}
+          onChange={handleChangeSignUp}
           name="first_name"
           placeholder="First Name"
         />
@@ -17,8 +17,8 @@ const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
       <div className="field">
         <input
           type="text"
-          value={user.last_name}
-          onChange={handleChangeLogIn}
+          value={SignUpUser.last_name}
+          onChange={handleChangeSignUp}
           name="last_name"
           placeholder="Last Name"
         />
@@ -26,8 +26,8 @@ const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
       <div className="field">
         <input
           type="email"
-          value={user.email}
-          onChange={handleChangeLogIn}
+          value={SignUpUser.email}
+          onChange={handleChangeSignUp}
           required
           name="email"
           placeholder="Email"
@@ -37,8 +37,8 @@ const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
         <input
           type="text"
           required
-          value={user.username}
-          onChange={handleChangeLogIn}
+          value={SignUpUser.username}
+          onChange={handleChangeSignUp}
           name="username"
           placeholder="Username"
         />
@@ -47,8 +47,8 @@ const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
         <input
           type="password"
           name="password"
-          onChange={handleChangeLogIn}
-          value={user.password}
+          onChange={handleChangeSignUp}
+          value={SignUpUser.password}
           placeholder="Password"
         />
       </div>
@@ -56,8 +56,8 @@ const SignUp = ({ user, handleChangeLogIn, handleSubmitSignup }) => {
         <input
           type="password"
           name="repeat_password"
-          onChange={handleChangeLogIn}
-          value={user.repeat_password}
+          onChange={handleChangeSignUp}
+          value={SignUpUser.repeat_password}
           placeholder="Repeat password"
         />
       </div>

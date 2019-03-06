@@ -23,13 +23,18 @@ class App extends Component {
   state = {
     user: {
       id: 0,
+
+      username: "",
+      password: "",
+      balance: 0
+    },
+    SignUpUser: {
       first_name: "",
       last_name: "",
       email: "",
       username: "",
       password: "",
-      repeat_password: "",
-      balance: 0
+      repeat_password: ""
     },
     isLoggedIn: false,
     transactions: [],
@@ -336,6 +341,14 @@ class App extends Component {
         password: "",
         balance: 0
       },
+      SignUpUser: {
+        first_name: "",
+        last_name: "",
+        email: "",
+        username: "",
+        password: "",
+        repeat_password: ""
+      },
       isLoggedIn: false
     });
   };
@@ -345,6 +358,17 @@ class App extends Component {
       return {
         user: {
           ...prevState.user,
+          [name]: value
+        }
+      };
+    });
+  };
+  handleChangeSignUp = e => {
+    const { name, value } = e.target;
+    this.setState(prevState => {
+      return {
+        SignUpUser: {
+          ...prevState.SignUpUser,
           [name]: value
         }
       };
@@ -374,7 +398,7 @@ class App extends Component {
       password,
       first_name,
       last_name
-    } = this.state.user;
+    } = this.state.SignUpUser;
     const response = await Axios.post(
       "/user/new",
       { username, email, password, first_name, last_name },
@@ -382,6 +406,12 @@ class App extends Component {
     );
 
     if (response.data.user.id) {
+      this.setState({
+        user: {
+          username,
+          password
+        }
+      });
       this.handleSubmitLogIn();
     }
   };
@@ -397,7 +427,8 @@ class App extends Component {
       message,
       dateFilter,
       filter,
-      isLoggedIn
+      isLoggedIn,
+      SignUpUser
     } = this.state;
 
     if (isLoggedIn) {
@@ -485,8 +516,8 @@ class App extends Component {
           />
           <SignUp
             handleSubmitSignup={this.handleSubmitSignup}
-            handleChangeLogIn={this.handleChangeLogIn}
-            user={user}
+            handleChangeSignUp={this.handleChangeSignUp}
+            SignUpUser={SignUpUser}
           />
         </div>
       );
