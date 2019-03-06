@@ -66,7 +66,7 @@ def transactions_date(request, user_id, fromDate, toDate):
     user = User.objects.get(id=user_id)
     transaction = list(user.transaction_set.filter(date__gte=fromDate, date__lte=toDate).order_by('-date', '-time').values(
         'id', 'amount', 'is_expense', 'comment', 'description', 'date', 'time'))
-    return JsonResponse({'transactions': transaction}, safe=False)
+    return JsonResponse({'user': {'balance': user.balance}, 'transactions': transaction}, safe=False)
 
 
 def user_auth(request):

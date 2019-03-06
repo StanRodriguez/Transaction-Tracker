@@ -5,6 +5,13 @@
   animation-direction: normal;
   animation-fill-mode: forwards;
 }
+.arrow-top {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 90%;
+  top: 0;
+  z-index: 3;
+}
 .date-filter {
   margin: 10px;
 }

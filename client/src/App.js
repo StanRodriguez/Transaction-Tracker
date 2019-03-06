@@ -5,7 +5,6 @@ import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
 import { Dimmer, Loader, Icon, Button, Message } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-
 import { Cookies } from "react-cookie";
 import TransactionForm from "./components/TransactionForm/TransactionForm";
 import {
@@ -93,10 +92,16 @@ class App extends Component {
       const response = await Axios(
         `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
       );
-      const { transactions } = response.data;
-      this.setState({
-        transactions,
-        isLoaded: true
+      const { transactions, user } = response.data;
+      this.setState(prevState => {
+        return {
+          user: {
+            ...prevState.user,
+            balance: user.balance
+          },
+          transactions,
+          isLoaded: true
+        };
       });
       localStorage.setItem("transactions", JSON.stringify(transactions));
     } else {
@@ -510,6 +515,10 @@ class App extends Component {
                 placeholder="Search..."
               />
             </div>
+            <br />
+            <a href="#header">
+              <i className="blue big arrow alternate circle up link icon arrow-top" />
+            </a>
             <div className="ui stackable three column grid transactions">
               {searchFilter
                 ? transactions
