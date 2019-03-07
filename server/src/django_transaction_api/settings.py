@@ -118,7 +118,7 @@ USE_L10N = True
 USE_TZ = True
 # Configure Django App for Heroku.
 django_heroku.settings(locals())
-STATIC_ROOT = "/var/www/example.com/static/"
+STATIC_ROOT = "/Users/Student_06/ga/projects/project-4/Project-4/server/src/staticfiles"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
