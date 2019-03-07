@@ -296,7 +296,7 @@ class App extends Component {
     if (navigator.onLine) {
       const { username, password } = this.state.user;
       const response = await Axios.post(
-        `/user/auth/`,
+        `/user/login/`,
         { username, password },
         { headers: { "X-CSRFToken": csrftoken } }
       );
@@ -338,25 +338,30 @@ class App extends Component {
       });
     }
   };
-  handleLogOut = () => {
-    sessionStorage.clear();
-    this.setState({
-      user: {
-        id: 0,
-        username: "",
-        password: "",
-        balance: 0
-      },
-      SignUpUser: {
-        first_name: "",
-        last_name: "",
-        email: "",
-        username: "",
-        password: "",
-        repeat_password: ""
-      },
-      isLoggedIn: false
-    });
+  handleLogOut = async () => {
+    try {
+      const response = await Axios.get("user/logout/");
+      console.log(response);
+
+      sessionStorage.clear();
+      this.setState({
+        user: {
+          id: 0,
+          username: "",
+          password: "",
+          balance: 0
+        },
+        SignUpUser: {
+          first_name: "",
+          last_name: "",
+          email: "",
+          username: "",
+          password: "",
+          repeat_password: ""
+        },
+        isLoggedIn: false
+      });
+    } catch (error) {}
   };
   handleChangeLogIn = e => {
     const { name, value } = e.target;

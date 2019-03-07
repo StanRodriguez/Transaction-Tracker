@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from transactions.models import User, Transaction
 from django.core import serializers
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -72,17 +72,24 @@ def transactions_date(request, user_id, fromDate, toDate):
 
 
 @csrf_exempt
-def user_auth(request):
+def user_login(request):
     data = json.loads(request.body)
     user = authenticate(username=data['username'], password=data['password'])
     # user = authenticate(username=username, password=password)
     if user is not None:
         response = {"error": 0, "user": user}
+        login(request, user)
         return JsonResponse({"error": 0, 'user': {'id': user.id, 'username': user.username,  'balance': user.balance}})
 
     else:
         response = {"error": 1, "user": user}
         return JsonResponse(response)
+
+
+def user_logout(request):
+    # user = authenticate(username=username, password=password)
+    logout(request)
+    return JsonResponse({"message": 0})
 
 
 @csrf_exempt
