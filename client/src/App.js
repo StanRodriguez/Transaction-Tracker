@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Axios from "axios";
+import axios from "axios";
 import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
 import { Dimmer, Loader, Icon, Button, Message } from "semantic-ui-react";
@@ -16,10 +16,13 @@ import LogIn from "./components/LogIn/LogIn";
 import SignUp from "./components/SignUp/SignUp";
 
 const cookies = new Cookies();
-const csrftoken = cookies.get("csrftoken");
 
+// const axios = Axios.create({
+//   baseURL: "https://trans-tracker.herokuapp.com"
+// });
 class App extends Component {
   state = {
+    csrftoken: cookies.get("csrftoken"),
     user: {
       id: 0,
       username: "",
@@ -90,7 +93,7 @@ class App extends Component {
     toDate = todayDateOnly()
   ) => {
     if (navigator.onLine) {
-      const response = await Axios(
+      const response = await axios(
         `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
       );
       const { transactions, user } = response.data;
@@ -137,12 +140,14 @@ class App extends Component {
   }
 
   delete = async id => {
+    console.log(this.state.csrftoken);
+
     try {
-      const response = await Axios({
+      const response = await axios({
         method: "delete",
         url: `/user/${this.state.user.id}/transaction/${id}/delete`,
 
-        headers: { "X-CSRFToken": csrftoken }
+        headers: { "X-CSRFToken": this.state.csrftoken }
       });
       response.data[0] > 0
         ? this.setState({
@@ -219,11 +224,11 @@ class App extends Component {
       const { transaction, user } = this.state;
       const [date, time] = this.formatToSend();
 
-      const response = await Axios({
+      const response = await axios({
         method: "post",
         url: `user/${user.id}/transaction/post/`,
         data: { ...transaction, date, time },
-        headers: { "X-CSRFToken": csrftoken }
+        headers: { "X-CSRFToken": this.state.csrftoken }
       });
       console.log(response.data);
       const message = response.data.id
@@ -256,10 +261,10 @@ class App extends Component {
     try {
       const { transaction } = this.state;
       const [date, time] = this.formatToSend();
-      const response = await Axios.put(
+      const response = await axios.put(
         `user/${this.state.user.id}/transaction/${transaction.id}/put/`,
         { ...transaction, date, time },
-        { headers: { "X-CSRFToken": csrftoken } }
+        { headers: { "X-CSRFToken": this.state.csrftoken } }
       );
 
       const message = response.data.id
@@ -295,10 +300,10 @@ class App extends Component {
     e && e.preventDefault();
     if (navigator.onLine) {
       const { username, password } = this.state.user;
-      const response = await Axios.post(
+      const response = await axios.post(
         `/user/login/`,
         { username, password },
-        { headers: { "X-CSRFToken": csrftoken } }
+        { headers: { "X-CSRFToken": this.state.csrftoken } }
       );
 
       if (response.data.user) {
@@ -315,7 +320,8 @@ class App extends Component {
               text: "",
               code: 0
             },
-            isLoggedIn: true
+            isLoggedIn: true,
+            csrftoken: cookies.get("csrftoken")
           };
         });
       } else {
@@ -340,9 +346,8 @@ class App extends Component {
   };
   handleLogOut = async () => {
     try {
-      const response = await Axios.get("user/logout/");
-      console.log(response);
-
+      const response = await axios.get("user/logout/");
+      cookies.remove("csrftoken");
       sessionStorage.clear();
       this.setState({
         user: {
@@ -413,10 +418,10 @@ class App extends Component {
           first_name,
           last_name
         } = this.state.SignUpUser;
-        const response = await Axios.post(
+        const response = await axios.post(
           "/user/new/",
           { username, email, password, first_name, last_name },
-          { headers: { "X-CSRFToken": csrftoken } }
+          { headers: { "X-CSRFToken": this.state.csrftoken } }
         );
 
         if (response.data.user.id) {

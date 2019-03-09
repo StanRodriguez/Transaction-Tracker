@@ -1,6 +1,6 @@
 import os
-import django_heroku
-from django.contrib import staticfiles
+# import django_heroku
+# from django.contrib import staticfilesx
 """
 Django settings for django_transaction_api project.
 
@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'transactions'
+    'transactions',
+    # 'corsheaders',
 ]
 AUTH_USER_MODEL = 'transactions.User'
 
 MIDDLEWARE = [
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'django_transaction_api.urls'
@@ -117,9 +120,10 @@ USE_L10N = True
 
 USE_TZ = True
 # Configure Django App for Heroku.
-django_heroku.settings(locals())
-STATIC_ROOT = "/Users/Student_06/ga/projects/project-4/Project-4/server/src/staticfiles"
+# django_heroku.settings(locals())
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# CORS_ORIGIN_ALLOW_ALL = True

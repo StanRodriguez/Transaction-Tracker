@@ -74,7 +74,9 @@ def transactions_date(request, user_id, fromDate, toDate):
 @csrf_exempt
 def user_login(request):
     data = json.loads(request.body)
-    user = authenticate(username=data['username'], password=data['password'])
+
+    user = authenticate(
+        request, username=data['username'], password=data['password'])
     # user = authenticate(username=username, password=password)
     if user is not None:
         response = {"error": 0, "user": user}
