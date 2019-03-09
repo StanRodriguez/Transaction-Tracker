@@ -1,5 +1,5 @@
 import os
-# import django_heroku
+import django_heroku
 # from django.contrib import staticfilesx
 """
 Django settings for django_transaction_api project.
@@ -40,12 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'transactions',
-    # 'corsheaders',
+    'corsheaders',
 ]
 AUTH_USER_MODEL = 'transactions.User'
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,10 +120,15 @@ USE_L10N = True
 
 USE_TZ = True
 # Configure Django App for Heroku.
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
 # CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'https://app.netlify.com/sites/trans-tracker/deploys/5c842b0d53a107aab4906674',
+    'localhost:8000',
+    '127.0.0.1:9000'
+)

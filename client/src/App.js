@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import axios from "axios";
+import Axios from "axios";
 import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
 import { Dimmer, Loader, Icon, Button, Message } from "semantic-ui-react";
@@ -17,9 +17,9 @@ import SignUp from "./components/SignUp/SignUp";
 
 const cookies = new Cookies();
 
-// const axios = Axios.create({
-//   baseURL: "https://trans-tracker.herokuapp.com"
-// });
+const axios = Axios.create({
+  baseURL: "https://trans-tracker.herokuapp.com"
+});
 class App extends Component {
   state = {
     csrftoken: cookies.get("csrftoken"),
