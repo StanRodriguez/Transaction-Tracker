@@ -27,7 +27,7 @@ SECRET_KEY = 'tcvw*=#p1(y(sxalz0t1jl=ndbn=u6_u0loekyikmxkvb*8_a0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['5c842f9d835c508eb6c1dc86--trans-tracker.netlify.com/']
 
 
 # Application definition
@@ -126,9 +126,16 @@ django_heroku.settings(locals())
 
 STATIC_URL = '/static/'
 
-# CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'https://app.netlify.com/sites/trans-tracker/deploys/5c842b0d53a107aab4906674',
-    'localhost:8000',
-    '127.0.0.1:9000'
-)
+CSRF_TRUSTED_ORIGINS = ['5c842f9d835c508eb6c1dc86--trans-tracker.netlify.com/']
+
+CORS_REPLACE_HTTPS_REFERER = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_COOKIE_DOMAIN = '5c842f9d835c508eb6c1dc86--trans-tracker.netlify.com/'
+
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     'https://5c842e904fb75fdcee11baf9--trans-tracker.netlify.com/',
+#     'localhost:8000',
+#     '127.0.0.1:9000'
+# )
