@@ -297,7 +297,18 @@ class App extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    e.target.id.value ? this.put() : this.post();
+    const balance = parseFloat(this.state.user.balance);
+    const amount = parseFloat(this.state.transaction.amount);
+    if (balance + amount >= 0) {
+      e.target.id.value ? this.put() : this.post();
+    } else {
+      this.setState({
+        message: {
+          text: "You do not have enough balance",
+          code: "negative"
+        }
+      });
+    }
   };
   handleSubmitLogIn = async e => {
     e && e.preventDefault();
