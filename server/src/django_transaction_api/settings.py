@@ -1,6 +1,6 @@
 import os
 import django_heroku
-from django.contrib import staticfiles
+# from django.contrib import staticfilesx
 """
 Django settings for django_transaction_api project.
 
@@ -27,7 +27,7 @@ SECRET_KEY = 'tcvw*=#p1(y(sxalz0t1jl=ndbn=u6_u0loekyikmxkvb*8_a0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['transac-tracker.herokuapp.com']
 
 
 # Application definition
@@ -39,18 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'transactions'
+    'transactions',
+    'corsheaders',
 ]
 AUTH_USER_MODEL = 'transactions.User'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'django_transaction_api.urls'
@@ -102,6 +106,29 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+CSRF_TRUSTED_ORIGINS = ['transac-tracker.herokuapp.com',
+                        'trans-tracker.herokuapp.com']
+
+CORS_REPLACE_HTTPS_REFERER = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'transac-tracker.herokuapp.com',
+    'trans-tracker.herokuapp.com'
+)
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'withcredentials'
+)
+CSRF_COOKIE_DOMAIN = 'trans-tracker.herokuapp.com'
 
 
 # Internationalization
@@ -118,7 +145,6 @@ USE_L10N = True
 USE_TZ = True
 # Configure Django App for Heroku.
 django_heroku.settings(locals())
-STATIC_ROOT = "/Users/Student_06/ga/projects/project-4/Project-4/server/src/staticfiles"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 

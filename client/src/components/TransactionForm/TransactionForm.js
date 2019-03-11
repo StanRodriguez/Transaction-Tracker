@@ -20,7 +20,8 @@ const TransactionForm = ({ handleSubmit, handleChange, transaction }) => {
           <Grid.Column>
             <Form.Field>
               <Input
-                label="Date:"
+                icon="calendar alternate outline"
+                iconPosition="left"
                 // value="2018-06-12T19:30"
                 type="datetime-local"
                 name="date"

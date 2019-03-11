@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
-import Axios from "axios";
+import axios from "axios";
 import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 import Transaction from "./components/Transaction/Transaction";
 import { Dimmer, Loader, Icon, Button, Message } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import { Cookies } from "react-cookie";
+import { Cookies, withCookies } from "react-cookie";
 import TransactionForm from "./components/TransactionForm/TransactionForm";
 import {
   actualDateTimeInput,
@@ -16,14 +16,17 @@ import LogIn from "./components/LogIn/LogIn";
 import SignUp from "./components/SignUp/SignUp";
 
 const cookies = new Cookies();
-const csrftoken = cookies.get("csrftoken");
 
+// const axios = Axios.create({
+//   baseURL: "https://trans-tracker.herokuapp.com"
+// });
 class App extends Component {
   state = {
+    csrftoken: cookies.get("csrftoken"),
     user: {
       id: 0,
-      username: "",
-      password: "",
+      username: "username",
+      password: "12345",
       balance: 0
     },
     SignUpUser: {
@@ -90,8 +93,8 @@ class App extends Component {
     toDate = todayDateOnly()
   ) => {
     if (navigator.onLine) {
-      const response = await Axios(
-        `/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
+      const response = await axios(
+        `https://trans-tracker.herokuapp.com/user/${id}/transactions/date/from/${fromDate}/to/${toDate}`
       );
       const { transactions, user } = response.data;
       this.setState(prevState => {
@@ -138,11 +141,13 @@ class App extends Component {
 
   delete = async id => {
     try {
-      const response = await Axios({
+      const response = await axios({
         method: "delete",
-        url: `/user/${this.state.user.id}/transaction/${id}/delete`,
+        url: `https://trans-tracker.herokuapp.com/user/${
+          this.state.user.id
+        }/transaction/${id}/delete`,
 
-        headers: { "X-CSRFToken": csrftoken }
+        headers: { "X-CSRFToken": this.state.csrftoken }
       });
       response.data[0] > 0
         ? this.setState({
@@ -219,13 +224,15 @@ class App extends Component {
       const { transaction, user } = this.state;
       const [date, time] = this.formatToSend();
 
-      const response = await Axios({
+      const response = await axios({
         method: "post",
-        url: `user/${user.id}/transaction/post/`,
+        url: `https://trans-tracker.herokuapp.com/user/${
+          user.id
+        }/transaction/post/`,
         data: { ...transaction, date, time },
-        headers: { "X-CSRFToken": csrftoken }
+        headers: { "X-CSRFToken": this.state.csrftoken },
+        withCredentials: true
       });
-      console.log(response.data);
       const message = response.data.id
         ? {
             text: "Transaction created successfully",
@@ -256,10 +263,12 @@ class App extends Component {
     try {
       const { transaction } = this.state;
       const [date, time] = this.formatToSend();
-      const response = await Axios.put(
-        `user/${this.state.user.id}/transaction/${transaction.id}/put/`,
+      const response = await axios.put(
+        `https://trans-tracker.herokuapp.com/user/${
+          this.state.user.id
+        }/transaction/${transaction.id}/put/`,
         { ...transaction, date, time },
-        { headers: { "X-CSRFToken": csrftoken } }
+        { headers: { "X-CSRFToken": this.state.csrftoken } }
       );
 
       const message = response.data.id
@@ -281,7 +290,6 @@ class App extends Component {
         isFormVisible: false,
         message
       });
-      console.log(response.data);
       this.getTransactions(this.state.user.id);
     } catch (e) {
       console.log(e.message);
@@ -289,16 +297,27 @@ class App extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    e.target.id.value ? this.put() : this.post();
+    const balance = parseFloat(this.state.user.balance);
+    const amount = parseFloat(this.state.transaction.amount);
+    if (balance + amount >= 0) {
+      e.target.id.value ? this.put() : this.post();
+    } else {
+      this.setState({
+        message: {
+          text: "You do not have enough balance",
+          code: "negative"
+        }
+      });
+    }
   };
   handleSubmitLogIn = async e => {
     e && e.preventDefault();
     if (navigator.onLine) {
       const { username, password } = this.state.user;
-      const response = await Axios.post(
-        `/user/login/`,
+      const response = await axios.post(
+        `https://trans-tracker.herokuapp.com/user/login/`,
         { username, password },
-        { headers: { "X-CSRFToken": csrftoken } }
+        { headers: { "X-CSRFToken": this.state.csrftoken } }
       );
 
       if (response.data.user) {
@@ -315,11 +334,17 @@ class App extends Component {
               text: "",
               code: 0
             },
-            isLoggedIn: true
+            isLoggedIn: true,
+            csrftoken: cookies.get("csrftoken")
           };
         });
       } else {
-        console.log("you are not login");
+        this.setState({
+          message: {
+            text: "Wrong username and/or password",
+            code: "negative"
+          }
+        });
       }
     } else {
       const user = JSON.parse(sessionStorage.getItem("user"));
@@ -340,9 +365,8 @@ class App extends Component {
   };
   handleLogOut = async () => {
     try {
-      const response = await Axios.get("user/logout/");
-      console.log(response);
-
+      await axios.get("https://trans-tracker.herokuapp.com/user/logout/");
+      cookies.remove("csrftoken");
       sessionStorage.clear();
       this.setState({
         user: {
@@ -388,7 +412,6 @@ class App extends Component {
   };
   handleEdit = transaction => {
     const { date, time } = transaction;
-    console.log(`${date}T${time}`);
 
     this.setState({
       transaction: { ...transaction, date: `${date}T${time}` },
@@ -413,10 +436,10 @@ class App extends Component {
           first_name,
           last_name
         } = this.state.SignUpUser;
-        const response = await Axios.post(
-          "/user/new/",
+        const response = await axios.post(
+          "https://trans-tracker.herokuapp.com/user/new/",
           { username, email, password, first_name, last_name },
-          { headers: { "X-CSRFToken": csrftoken } }
+          { headers: { "X-CSRFToken": this.state.csrftoken } }
         );
 
         if (response.data.user.id) {
@@ -578,7 +601,19 @@ class App extends Component {
     } else {
       return (
         <div className="ui container">
-          <h1 className="ui header app-title-h1">Simple Tracker</h1>
+          <h1 className="ui header app-title-h1">Transaction Tracker</h1>
+          {message.text ? (
+            <div className="message-div">
+              <Message
+                positive={message.code === "positive" ? true : false}
+                negative={message.code === "negative" ? true : false}
+              >
+                <Message.Header>{message.text}</Message.Header>
+              </Message>
+            </div>
+          ) : (
+            ""
+          )}
           <LogIn
             user={user}
             handleChangeLogIn={this.handleChangeLogIn}
@@ -597,4 +632,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withCookies(App);
