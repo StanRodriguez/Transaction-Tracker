@@ -27,7 +27,7 @@ SECRET_KEY = 'tcvw*=#p1(y(sxalz0t1jl=ndbn=u6_u0loekyikmxkvb*8_a0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['5c842f9d835c508eb6c1dc86--trans-tracker.netlify.com/']
+ALLOWED_HOSTS = ['transac-tracker.herokuapp.com']
 
 
 # Application definition
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -105,6 +106,29 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+CSRF_TRUSTED_ORIGINS = ['transac-tracker.herokuapp.com',
+                        'trans-tracker.herokuapp.com']
+
+CORS_REPLACE_HTTPS_REFERER = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'transac-tracker.herokuapp.com',
+    'trans-tracker.herokuapp.com'
+)
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'withcredentials'
+)
+CSRF_COOKIE_DOMAIN = 'trans-tracker.herokuapp.com'
 
 
 # Internationalization
@@ -125,17 +149,3 @@ django_heroku.settings(locals())
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-CSRF_TRUSTED_ORIGINS = ['5c842f9d835c508eb6c1dc86--trans-tracker.netlify.com/']
-
-CORS_REPLACE_HTTPS_REFERER = True
-CORS_ALLOW_CREDENTIALS = True
-
-CSRF_COOKIE_DOMAIN = '5c842f9d835c508eb6c1dc86--trans-tracker.netlify.com/'
-
-CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     'https://5c842e904fb75fdcee11baf9--trans-tracker.netlify.com/',
-#     'localhost:8000',
-#     '127.0.0.1:9000'
-# )

@@ -5,12 +5,12 @@ from django.core import serializers
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 import json
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 
 # Create your views here.
 
-
+@csrf_exempt
 def transactions_view(request, id=None):
     user = User.objects.get(id=id)
     transaction = list(user.transaction_set.order_by('-date', '-time').values(
@@ -18,6 +18,7 @@ def transactions_view(request, id=None):
     return JsonResponse({'user': {'id': user.id, 'username': user.username, 'balance': user.balance}, 'transactions': transaction}, safe=False)
 
 
+@csrf_exempt
 def transaction_delete(request, user_id, transaction_id):
     # if request.method == 'DELETE':
     #     pass
@@ -29,6 +30,7 @@ def transaction_delete(request, user_id, transaction_id):
         return JsonResponse({"id": 0, "message": e.args}, safe=False)
 
 
+@csrf_exempt
 def transaction_post(request, user_id):
     # if request.method == 'DELETE':
     #     pass
@@ -51,6 +53,7 @@ def transaction_post(request, user_id):
 #     transaction = Transaction.objects.get(id=transaction_id, user_id=user_id)
 
 #     return JsonResponse({"id": transaction.id, "amount": transaction.amount, "description": transaction.description, "comment": transaction.comment, "date": transaction.date, "time": transaction.time, "is_expense": transaction.is_expense}, safe=False)
+@csrf_exempt
 def transaction_put(request, user_id, transaction_id):
     try:
         data = json.loads(request.body)
@@ -63,8 +66,8 @@ def transaction_put(request, user_id, transaction_id):
         return JsonResponse({"id": 0, "message": e.args}, safe=False)
 
 
+@csrf_exempt
 def transactions_date(request, user_id, fromDate, toDate):
-
     user = User.objects.get(id=user_id)
     transaction = list(user.transaction_set.filter(date__gte=fromDate, date__lte=toDate).order_by('-date', '-time').values(
         'id', 'amount', 'is_expense', 'comment', 'description', 'date', 'time'))
@@ -81,6 +84,7 @@ def user_login(request):
     if user is not None:
         response = {"error": 0, "user": user}
         login(request, user)
+        request.META["CSRF_COOKIE_USED"] = True
         return JsonResponse({"error": 0, 'user': {'id': user.id, 'username': user.username,  'balance': user.balance}})
 
     else:
@@ -88,6 +92,7 @@ def user_login(request):
         return JsonResponse(response)
 
 
+@csrf_exempt
 def user_logout(request):
     # user = authenticate(username=username, password=password)
     logout(request)
