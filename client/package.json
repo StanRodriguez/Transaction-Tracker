@@ -7,7 +7,7 @@
     "node": "10.15.1"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "react": "^16.8.3",
     "react-cookie": "^3.0.8",
     "react-dom": "^16.8.3",
